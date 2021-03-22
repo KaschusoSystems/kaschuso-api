@@ -1,4 +1,6 @@
 const axios = require('axios').default;
+sslkeylog = require('sslkeylog');
+sslkeylog.hookAll();
 axios.defaults.withCredentials = true;
 
 const xpath = require('xpath-html');
@@ -23,15 +25,24 @@ const headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36'
 };
 
-
 async function main() {
     const res = await axios.get('https://kaschuso.so.ch/login/sls/auth?RequestedPage=%2fgibsso', {
         withCredentials: true,
-        headers: headers
+        headers: headers,
+        maxRedirects: 0,
+    }).catch(error => {
+        console.log(error.response.status);
+        if (error.response.status == 302) {
+            // read se cookie and set it in headers
+            // maybe use interceptor to set cookie when something changes.
+            console.log("everything is fine!");
+            return Promise.resolve(error);
+        }
+        return Promise.reject(error);
     });
 
-    console.log(res.headers);
-    console.log(selectFromHtml('//*[@id="form-holder"]/div/form', res.data).getAttribute('action'));
+    
+    //console.log(selectFromHtml('//*[@id="form-holder"]/div/form', res.data).getAttribute('action'));
 }
 
 function selectFromHtml(selector, html) {
