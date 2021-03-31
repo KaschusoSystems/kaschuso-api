@@ -1,8 +1,10 @@
 require('dotenv').config();
+const cryptoRandomString = require('crypto-random-string');
+
 
 const axios = require('axios').default;
-// sslkeylog = require('sslkeylog');
-// sslkeylog.hookAll();
+sslkeylog = require('sslkeylog');
+sslkeylog.hookAll();
 axios.defaults.withCredentials = true;
 const FormData = require('form-data');
 
@@ -51,7 +53,7 @@ async function main() {
     SCDID_S = getScdidsCookie(res.cookieValue);
     console.log('Got session id: ' + SCDID_S);
     if (res.cookieValue) {
-        headers['Cookie'] = SCDID_S;
+        headers['Cookie'] = SCDID_S + "; SLSLanguage=de";
     }
 
     if (res.locationValue) {
@@ -70,9 +72,49 @@ async function main() {
         maxRedirects: 0,
     });
 
+    const sesJS = await axios.get("https://kaschuso.so.ch/sil-bid-check/ses.js", {
+        withCredentials: true,
+        headers: headers,
+        maxRedirects: 0,
+    });
+
+    
+    //let param1 = sesJS.data.match("function sesStart\\\(loginform\\\) {\n  if\\\(\"([^\"]*?)\"")[1];
+    //console.log(param1);
+    
+    let param2 = sesJS.data.match("var bid = getBid\\\('([^']*?)'")[1];
+    //console.log(param2);
+    let action = "auth?" + param2 + "=" + cryptoRandomString({length: 32, type: 'hex'});
+    console.log(action);
+
     const currentRequestedPage = getInputValue(formRes.data, 'input[name=currentRequestedPage]');
-    const formData = createFormData(`${process.env.FIRST_NAME}.${process.env.LAST_NAME}`, process.env.PASSWORD, currentRequestedPage);
-    console.log(formData);
+    const formData = createFormData(`${process.env.FIRST_NAME}.${process.env.LAST_NAME}`, "uQWsJ*guP&W8rG3MJI@r*YyA3N39HUh&", currentRequestedPage);
+
+    //console.log(formData);
+    
+    let loginHeaders = Object.assign({}, headers);
+    loginHeaders['Content-Type'] = "application/x-www-form-urlencoded";
+    loginHeaders['Origin'] = "https://kaschuso.so.ch";
+    loginHeaders['Referer'] = "https://kaschuso.so.ch/login/sls/auth?RequestedPage=%2fgibsso";
+    loginHeaders['Sec-Fetch-Site'] = "same-origin";
+
+    try {
+        const loggedInMaybe = await axios.post("https://kaschuso.so.ch/login/sls/" + action, {
+            data: `userid=${process.env.FIRST_NAME}.${process.env.LAST_NAME}&password=${encodeURIComponent("uQWsJ*guP&W8rG3MJI@r*YyA3N39HUh&")}&currentRequestedPage=${encodeURIComponent(currentRequestedPage)}`,
+            withCredentials: true,
+            headers: loginHeaders,
+            maxRedirects: 0,
+        });
+
+        console.log(loggedInMaybe.data);
+
+        console.log(loggedInMaybe.headers);
+
+        console.log(loggedInMaybe.status);
+    } catch (error) {
+        console.log(error);
+    }
+    
 }
 
 
@@ -93,14 +135,10 @@ function createFormData(username, password, requestedPage) {
 }
 
 
-
-
 function getInputValue(html, selector) {
     const $ = cheerio.load(html);
     return $(selector).attr('value');
 }
-
-main();
 
 axios.interceptors.response.use((response) => {
     return response;
@@ -112,3 +150,5 @@ axios.interceptors.response.use((response) => {
     }
     return Promise.reject(error);
 });
+
+main();
