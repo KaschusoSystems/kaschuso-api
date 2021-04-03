@@ -1,16 +1,15 @@
 require('dotenv').config();
 const cryptoRandomString = require('crypto-random-string');
 
-
 const axios = require('axios').default;
 sslkeylog = require('sslkeylog');
 sslkeylog.hookAll();
+
 axios.defaults.withCredentials = true;
-const FormData = require('form-data');
+
+var qs = require('qs');
 
 const cheerio = require('cheerio');
-// const xpath = require('xpath-html');
-// const dom = require('xmldom').DOMParser
 
 const DEFAULT_HEADERS = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,/;q=0.8,application/signed-exchange;v=b3;q=0.9',
@@ -56,14 +55,12 @@ async function main() {
         headers['Cookie'] = SCDID_S + "; SLSLanguage=de";
     }
 
-    if (res.locationValue) {
-        console.log('Redirecting request: ' + res.locationValue);
-        const redirectRes = await axios.get(res.locationValue, {
-            withCredentials: true,
-            headers: headers,
-            maxRedirects: 0,
-        });
-    }
+    console.log('Redirecting request: ' + res.locationValue);
+    const redirectRes = await axios.get(res.locationValue, {
+        withCredentials: true,
+        headers: headers,
+        maxRedirects: 0,
+    });
 
     console.log('Requesting: ' + FORM_URL);
     const formRes = await axios.get(FORM_URL, {
@@ -77,20 +74,12 @@ async function main() {
         headers: headers,
         maxRedirects: 0,
     });
-
     
-    //let param1 = sesJS.data.match("function sesStart\\\(loginform\\\) {\n  if\\\(\"([^\"]*?)\"")[1];
-    //console.log(param1);
-    
-    let param2 = sesJS.data.match("var bid = getBid\\\('([^']*?)'")[1];
-    //console.log(param2);
-    let action = "auth?" + param2 + "=" + cryptoRandomString({length: 32, type: 'hex'});
+    let param = sesJS.data.match("var bid = getBid\\\('([^']*?)'")[1];
+    let action = "auth?" + param + "=" + cryptoRandomString({length: 32, type: 'hex'});
     console.log(action);
 
     const currentRequestedPage = getInputValue(formRes.data, 'input[name=currentRequestedPage]');
-    const formData = createFormData(`${process.env.FIRST_NAME}.${process.env.LAST_NAME}`, "uQWsJ*guP&W8rG3MJI@r*YyA3N39HUh&", currentRequestedPage);
-
-    //console.log(formData);
     
     let loginHeaders = Object.assign({}, headers);
     loginHeaders['Content-Type'] = "application/x-www-form-urlencoded";
@@ -98,23 +87,52 @@ async function main() {
     loginHeaders['Referer'] = "https://kaschuso.so.ch/login/sls/auth?RequestedPage=%2fgibsso";
     loginHeaders['Sec-Fetch-Site'] = "same-origin";
 
-    try {
-        const loggedInMaybe = await axios.post("https://kaschuso.so.ch/login/sls/" + action, {
-            data: `userid=${process.env.FIRST_NAME}.${process.env.LAST_NAME}&password=${encodeURIComponent("uQWsJ*guP&W8rG3MJI@r*YyA3N39HUh&")}&currentRequestedPage=${encodeURIComponent(currentRequestedPage)}`,
+    const loggedInMaybe = await axios.post("https://kaschuso.so.ch/login/sls/" + action, 
+        qs.stringify({
+            userid: `${process.env.FIRST_NAME}.${process.env.LAST_NAME}`,
+            password: "uQWsJ*guP&W8rG3MJI@r*YyA3N39HUh&",
+            currentRequestedPage: encodeURIComponent(currentRequestedPage),
+        }),
+        {
             withCredentials: true,
             headers: loginHeaders,
             maxRedirects: 0,
-        });
-
-        console.log(loggedInMaybe.data);
-
-        console.log(loggedInMaybe.headers);
-
-        console.log(loggedInMaybe.status);
-    } catch (error) {
-        console.log(error);
-    }
+        }
+    );
     
+    SCDID_S = getScdidsCookie(loggedInMaybe.cookieValue);
+    console.log('Got session id: ' + SCDID_S);
+    headers['Cookie'] = SCDID_S + "; SLSLanguage=de";
+
+    console.log('Redirecting request: ' + loggedInMaybe.locationValue);
+    const redirectRes1 = await axios.get(loggedInMaybe.locationValue, {
+        withCredentials: true,
+        headers: headers,
+        maxRedirects: 0,
+    });
+
+    console.log('Redirecting request: ' + redirectRes1.locationValue);
+    const redirectRes2 = await axios.get(redirectRes1.locationValue, {
+        withCredentials: true,
+        headers: headers,
+        maxRedirects: 0,
+    });
+
+    console.log('Redirecting request: ' + redirectRes2.locationValue);
+    const redirectRes3 = await axios.get(redirectRes2.locationValue, {
+        withCredentials: true,
+        headers: headers,
+        maxRedirects: 0,
+    });
+
+    const notes = await axios.get("https://kaschuso.so.ch/gibsso/loginto.php?pageid=21311&mode=0&lang=", {
+        withCredentials: true,
+        headers: headers,
+        maxRedirects: 0,
+    });
+
+    console.log(notes.data);
+    console.log(notes.status);
 }
 
 
@@ -125,15 +143,6 @@ function getScdidsCookie(cookies) {
     }
     return null;
 }
-
-function createFormData(username, password, requestedPage) {
-    const formData = new FormData();
-    formData.append('userid', username);
-    formData.append('password', password);
-    formData.append('currentRequestedPage', requestedPage);
-    return formData;
-}
-
 
 function getInputValue(html, selector) {
     const $ = cheerio.load(html);

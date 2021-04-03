@@ -12,6 +12,7 @@
     "crypto-random-string": "^3.3.1",
     "dotenv": "^8.2.0",
     "form-data": "^4.0.0",
+    "qs": "^6.10.1",
     "sslkeylog": "^0.2.2",
     "xmldom": "^0.5.0",
     "xpath": "^0.0.32",
