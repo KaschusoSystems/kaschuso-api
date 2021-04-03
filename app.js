@@ -2,8 +2,8 @@ require('dotenv').config();
 const cryptoRandomString = require('crypto-random-string');
 
 const axios = require('axios').default;
-sslkeylog = require('sslkeylog');
-sslkeylog.hookAll();
+// sslkeylog = require('sslkeylog');
+// sslkeylog.hookAll();
 
 axios.defaults.withCredentials = true;
 
@@ -30,68 +30,75 @@ const DEFAULT_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36'
 };
 
+const BASE_URL = 'https://kaschuso.so.ch/';
+const FORM_URL = 'https://kaschuso.so.ch/login/sls/auth?RequestedPage=%2f';
+const LOGIN_URL = 'https://kaschuso.so.ch/login/sls/';
+const SES_JS_URL = 'https://kaschuso.so.ch/sil-bid-check/ses.js';
 
-const INIT_URL = 'https://kaschuso.so.ch/gibsso';
-const AUTH_URL = 'https://kaschuso.so.ch/login/sls/auth?86D0CA1D738C=c73bced75cce9f98ad1b26cbea356680';
-const FORM_URL = 'https://kaschuso.so.ch/login/sls/auth?RequestedPage=%2fgibsso';
-
-
-const cookies = [];
-let SCDID_S;
-
+const SES_PARAM_REGEX = "var bid = getBid\\\('([^']*?)'";
 
 async function main() {
+    var session = await authenticate(process.env.MANDATOR, process.env.KASCHUSO_USERNAME, process.env.PASSWORD);
+
+    console.log(session);
+}
+
+async function authenticate(mandator, username, password) {
+    
     let headers = Object.assign({}, DEFAULT_HEADERS);
 
-    const res = await axios.get(INIT_URL, {
+    // set basic cookies to request login page
+
+    const initRes = await axios.get(BASE_URL + mandator, {
         withCredentials: true,
         headers: headers,
         maxRedirects: 0,
     });
 
-    SCDID_S = getScdidsCookie(res.cookieValue);
+    SCDID_S = initRes.cookieValue[0].split(';')[0];
     console.log('Got session id: ' + SCDID_S);
-    if (res.cookieValue) {
-        headers['Cookie'] = SCDID_S + "; SLSLanguage=de";
-    }
+    headers['Cookie'] = SCDID_S + '; SLSLanguage=de';
 
-    console.log('Redirecting request: ' + res.locationValue);
-    const redirectRes = await axios.get(res.locationValue, {
+    console.log('Redirecting to: ' + initRes.locationValue);
+    await axios.get(initRes.locationValue, {
         withCredentials: true,
         headers: headers,
         maxRedirects: 0,
     });
 
-    console.log('Requesting: ' + FORM_URL);
-    const formRes = await axios.get(FORM_URL, {
+    // request login page
+
+    const formUrl = FORM_URL + mandator;
+
+    console.log('Requesting: ' + formUrl);
+    const formRes = await axios.get(formUrl, {
         withCredentials: true,
         headers: headers,
         maxRedirects: 0,
     });
 
-    const sesJS = await axios.get("https://kaschuso.so.ch/sil-bid-check/ses.js", {
+    console.log('Requesting: ' + SES_JS_URL);
+    const sesJS = await axios.get(SES_JS_URL, {
         withCredentials: true,
         headers: headers,
         maxRedirects: 0,
     });
     
-    let param = sesJS.data.match("var bid = getBid\\\('([^']*?)'")[1];
-    let action = "auth?" + param + "=" + cryptoRandomString({length: 32, type: 'hex'});
-    console.log(action);
+    let param = sesJS.data.match(SES_PARAM_REGEX)[1];
+    let action = 'auth?' + param + '=' + cryptoRandomString({length: 32, type: 'hex'});
 
-    const currentRequestedPage = getInputValue(formRes.data, 'input[name=currentRequestedPage]');
+    const currentRequestedPage = cheerio.load(formRes.data)('input[name=currentRequestedPage]').attr('value');
     
     let loginHeaders = Object.assign({}, headers);
-    loginHeaders['Content-Type'] = "application/x-www-form-urlencoded";
-    loginHeaders['Origin'] = "https://kaschuso.so.ch";
-    loginHeaders['Referer'] = "https://kaschuso.so.ch/login/sls/auth?RequestedPage=%2fgibsso";
-    loginHeaders['Sec-Fetch-Site'] = "same-origin";
+    loginHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
 
-    const loggedInMaybe = await axios.post("https://kaschuso.so.ch/login/sls/" + action, 
+    // make login
+
+    const loggedIn = await axios.post(LOGIN_URL + action, 
         qs.stringify({
-            userid: `${process.env.FIRST_NAME}.${process.env.LAST_NAME}`,
-            password: "uQWsJ*guP&W8rG3MJI@r*YyA3N39HUh&",
-            currentRequestedPage: encodeURIComponent(currentRequestedPage),
+            userid: username,
+            password: password,
+            currentRequestedPage: currentRequestedPage,
         }),
         {
             withCredentials: true,
@@ -100,53 +107,10 @@ async function main() {
         }
     );
     
-    SCDID_S = getScdidsCookie(loggedInMaybe.cookieValue);
+    var SCDID_S = loggedIn.cookieValue[0].split(';')[0];
     console.log('Got session id: ' + SCDID_S);
-    headers['Cookie'] = SCDID_S + "; SLSLanguage=de";
 
-    console.log('Redirecting request: ' + loggedInMaybe.locationValue);
-    const redirectRes1 = await axios.get(loggedInMaybe.locationValue, {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0,
-    });
-
-    console.log('Redirecting request: ' + redirectRes1.locationValue);
-    const redirectRes2 = await axios.get(redirectRes1.locationValue, {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0,
-    });
-
-    console.log('Redirecting request: ' + redirectRes2.locationValue);
-    const redirectRes3 = await axios.get(redirectRes2.locationValue, {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0,
-    });
-
-    const notes = await axios.get("https://kaschuso.so.ch/gibsso/loginto.php?pageid=21311&mode=0&lang=", {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0,
-    });
-
-    console.log(notes.data);
-    console.log(notes.status);
-}
-
-
-// uuuuugggllllyyyyyy haaaaaackckckckckck
-function getScdidsCookie(cookies) {
-    if (cookies && cookies.length >= 1) {
-        return cookies[0].split(';')[0];
-    }
-    return null;
-}
-
-function getInputValue(html, selector) {
-    const $ = cheerio.load(html);
-    return $(selector).attr('value');
+    return SCDID_S;
 }
 
 axios.interceptors.response.use((response) => {
