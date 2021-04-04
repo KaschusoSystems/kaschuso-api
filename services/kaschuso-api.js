@@ -100,7 +100,7 @@ async function authenticate(mandator, username, password) {
             maxRedirects: 0
         }
     );
-
+    
     if (!loginRes.cookieValue) {
         const error =  new Error('username or password invalid');
         error.name = 'AuthenticationError';
@@ -118,18 +118,9 @@ async function authenticate(mandator, username, password) {
 async function getUserInfo(mandator, username, password) {
     console.log('Getting user info for: ' + username);
 
-    let cookies = await getCookies(mandator, username, password);
-    
-    let headers = Object.assign({}, DEFAULT_HEADERS);
-    headers['Cookie'] = toCookieHeaderString(cookies);
-    
-    const homeRes = await axios.get(BASE_URL + mandator + '/loginto.php', {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0
-    });
-    
-    const $home = cheerio.load(homeRes.data);
+    const { headers, homeData } = await getHomepageAndHeaders(mandator, username, password);
+
+    const $home = cheerio.load(homeData);
     const infos = {}
     $home('#content-card > div > div > table')
         .find('tbody > tr')
@@ -142,13 +133,7 @@ async function getUserInfo(mandator, username, password) {
             infos[row[0]] = row[1];
         });
 
-    cookies['PHPSESSID']  = homeRes.headers['set-cookie'][0].split(';')[0].split('=')[1];
-    cookies['layoutSize'] = homeRes.headers['set-cookie'][1].split(';')[0].split('=')[1]
-    headers['Cookie'] = toCookieHeaderString(cookies);
-
-    const settingsUrl = findUrl(mandator, homeRes.data, SETTINGS_PAGE_ID);
-
-    const settingsRes = await axios.get(settingsUrl, {
+    const settingsRes = await axios.get(findUrl(mandator, homeData, SETTINGS_PAGE_ID), {
         withCredentials: true,
         headers: headers,
         maxRedirects: 0
@@ -177,24 +162,10 @@ async function getUserInfo(mandator, username, password) {
 
 async function getMarks(mandator, username, password) {
     console.log('Getting marks for: ' + username);
-    let cookies = await getCookies(mandator, username, password);
     
-    let headers = Object.assign({}, DEFAULT_HEADERS);
-    headers['Cookie'] = toCookieHeaderString(cookies);
-    
-    const homeRes = await axios.get(BASE_URL + mandator + '/loginto.php', {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0
-    });
-    
-    cookies['PHPSESSID']  = homeRes.headers['set-cookie'][0].split(';')[0].split('=')[1];
-    cookies['layoutSize'] = homeRes.headers['set-cookie'][1].split(';')[0].split('=')[1]
-    headers['Cookie'] = toCookieHeaderString(cookies);
+    const { headers, homeData } = await getHomepageAndHeaders(mandator, username, password);
 
-    const marksUrl = findUrl(mandator, homeRes.data, MARKS_PAGE_ID);
-
-    const marksRes = await axios.get(marksUrl, {
+    const marksRes = await axios.get(findUrl(mandator, homeData, MARKS_PAGE_ID), {
         withCredentials: true,
         headers: headers,
         maxRedirects: 0
@@ -250,24 +221,10 @@ async function getMarks(mandator, username, password) {
 
 async function getAbsences(mandator, username, password) {
     console.log('Getting absences for: ' + username);
-    let cookies = await getCookies(mandator, username, password);
     
-    let headers = Object.assign({}, DEFAULT_HEADERS);
-    headers['Cookie'] = toCookieHeaderString(cookies);
-    
-    const homeRes = await axios.get(BASE_URL + mandator + '/loginto.php', {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0
-    });
-    
-    cookies['PHPSESSID']  = homeRes.headers['set-cookie'][0].split(';')[0].split('=')[1];
-    cookies['layoutSize'] = homeRes.headers['set-cookie'][1].split(';')[0].split('=')[1]
-    headers['Cookie'] = toCookieHeaderString(cookies);
+    const { headers, homeData } = await getHomepageAndHeaders(mandator, username, password);
 
-    const absencesUrl = findUrl(mandator, homeRes.data, ABSENCES_PAGE_ID);
-
-    const absencesRes = await axios.get(absencesUrl, {
+    const absencesRes = await axios.get(findUrl(mandator, homeData, ABSENCES_PAGE_ID), {
         withCredentials: true,
         headers: headers,
         maxRedirects: 0
@@ -302,6 +259,27 @@ async function getAbsences(mandator, username, password) {
 
 function findUrl(mandator, html, pageid) {
     return BASE_URL + mandator + '/' + html.match('"(index\\.php\\?pageid=' + pageid + '[^"]*)"')[1];
+}
+
+async function getHomepageAndHeaders(mandator, username, password) {
+    let cookies = await getCookies(mandator, username, password);
+    
+    const headers = Object.assign({}, DEFAULT_HEADERS);
+    headers['Cookie'] = toCookieHeaderString(cookies);
+    
+    const homeRes = await axios.get(BASE_URL + mandator + '/loginto.php', {
+        withCredentials: true,
+        headers: headers,
+        maxRedirects: 0
+    });
+    
+    cookies['PHPSESSID']  = homeRes.headers['set-cookie'][0].split(';')[0].split('=')[1];
+    cookies['layoutSize'] = homeRes.headers['set-cookie'][1].split(';')[0].split('=')[1]
+    headers['Cookie'] = toCookieHeaderString(cookies);
+    return {
+        headers: headers,
+        homeData: homeRes.data
+    };
 }
 
 async function getCookies(mandator, username, password) {
