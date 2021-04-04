@@ -12,7 +12,8 @@ const LOGIN_URL  = BASE_URL + 'login/sls/';
 const SES_JS_URL = BASE_URL + 'sil-bid-check/ses.js';
 
 
-const MARKS_PAGE_ID = 21311;
+const MARKS_PAGE_ID    = 21311;
+const ABSENCES_PAGE_ID = 21111;
 const SETTINGS_PAGE_ID = 22500;
 
 const SES_PARAM_REGEX = "var bid = getBid\\\('([^']*?)'";
@@ -195,9 +196,7 @@ async function getMarks(mandator, username, password) {
 
     const $ = cheerio.load(marksRes.data);
 
-    const markTable = $('#uebersicht_bloecke>page>div>table');
-
-    return $(markTable)
+    return $('#uebersicht_bloecke>page>div>table')
         // find table with marks for each subject
         .find('tbody>tr>td>table')
         .toArray()
@@ -244,7 +243,55 @@ async function getMarks(mandator, username, password) {
 } 
 
 async function getAbsences(mandator, username, password) {
+    console.log('Getting absences for: ' + username);
+    let cookies = await getCookies(mandator, username, password);
     
+    let headers = Object.assign({}, DEFAULT_HEADERS);
+    headers['Cookie'] = toCookieHeaderString(cookies);
+    
+    const homeRes = await axios.get(BASE_URL + mandator + '/loginto.php', {
+        withCredentials: true,
+        headers: headers,
+        maxRedirects: 0
+    });
+    
+    cookies['PHPSESSID']  = homeRes.headers['set-cookie'][0].split(';')[0].split('=')[1];
+    cookies['layoutSize'] = homeRes.headers['set-cookie'][1].split(';')[0].split('=')[1]
+    headers['Cookie'] = toCookieHeaderString(cookies);
+
+    const absencesUrl = findUrl(mandator, homeRes.data, ABSENCES_PAGE_ID);
+
+    const absencesRes = await axios.get(absencesUrl, {
+        withCredentials: true,
+        headers: headers,
+        maxRedirects: 0
+    });
+
+    const $ = cheerio.load(absencesRes.data);
+    
+    return $('#uebersicht_bloecke>page>div>form>table')
+        // find table with marks for each subject
+        .find('tbody>tr')
+        .toArray()
+        // filter totalizer row
+        .filter(x => $(x).find('td > div > input')[0])
+        .map(x => {
+            const absenceRowCells = $(x)
+                .find('td')
+                .toArray()
+                .map(x => $(x).text().trim());
+
+            const reason = $(x).find('td > div > input').attr('value');
+            
+            return {
+                date: absenceRowCells[0],
+                time: absenceRowCells[1],
+                class: absenceRowCells[2],
+                status: absenceRowCells[3],
+                comment: absenceRowCells[4] ? absenceRowCells[4] : undefined,
+                reason: reason ? reason : undefined
+            };
+        });
 }
 
 function findUrl(mandator, html, pageid) {
@@ -257,7 +304,23 @@ async function getCookies(mandator, username, password) {
     if (!cookies) {
         cookies = await authenticate(mandator, username, password);
         cookiesMap[key] = cookies;
+    } else {
+        // check if cookies are valid
+        let headers = Object.assign({}, DEFAULT_HEADERS);
+        headers['Cookie'] = toCookieHeaderString(cookies);
+        
+        const homeRes = await axios.get(BASE_URL + mandator + '/loginto.php', {
+            withCredentials: true,
+            headers: headers,
+            maxRedirects: 0
+        });
+        if (homeRes.status !== 200) {
+            console.log('Session expired for: ' + username);
+            cookies = await authenticate(mandator, username, password);
+            cookiesMap[key] = cookies;
+        }
     }
+
     return cookies;
 }
 

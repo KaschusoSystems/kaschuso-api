@@ -1,18 +1,16 @@
-const { authenticate } = require('../../services/kaschuso-api');
+const { getAbsences } = require('../../services/kaschuso-api');
 
 var router = require('express').Router();
 
-// whether the user is authenticated
 router.get('/', function(req, res, next) {
     const mandator = req.query.mandator;
     const username = req.query.username;
     const password = req.query.password;
-    authenticate(mandator, username, password).then(cookies => {
-        const authenticated = cookies && cookies.SCDID_S;
+    getAbsences(mandator, username, password).then(absences => {
         return res.json({
             mandator: mandator,
             username: username,
-            authenticated: authenticated 
+            absences: absences
         });
     }).catch(next);
 });
