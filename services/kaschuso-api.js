@@ -1,4 +1,3 @@
-
 const cryptoRandomString = require('crypto-random-string');
 
 const axios = require('axios').default;
@@ -12,7 +11,9 @@ const FORM_URL   = BASE_URL + 'login/sls/auth?RequestedPage=%2f';
 const LOGIN_URL  = BASE_URL + 'login/sls/';
 const SES_JS_URL = BASE_URL + 'sil-bid-check/ses.js';
 
-const REFERER_URL = BASE_URL + '/login/sls/auth?RequestedPage=/';
+
+const MARKS_PAGE_ID = 21311;
+const SETTINGS_PAGE_ID = 22500;
 
 const SES_PARAM_REGEX = "var bid = getBid\\\('([^']*?)'";
 
@@ -106,6 +107,67 @@ async function authenticate(mandator, username, password) {
     return cookies;
 }
 
+
+async function getUserInfo(mandator, username, password) {
+    console.log('Getting user info for: ' + username);
+
+    let cookies = await getCookies(mandator, username, password);
+    
+    let headers = Object.assign({}, DEFAULT_HEADERS);
+    headers['Cookie'] = toCookieHeaderString(cookies);
+    
+    const homeRes = await axios.get(BASE_URL + mandator + '/loginto.php', {
+        withCredentials: true,
+        headers: headers,
+        maxRedirects: 0
+    });
+    
+    const $home = cheerio.load(homeRes.data);
+    const infos = {}
+    $home('#content-card > div > div > table')
+        .find('tbody > tr')
+        .toArray()
+        .forEach(x => {
+            const row = $home(x)
+                .find('td')
+                .toArray()
+                .map(x => $home(x).text())
+            infos[row[0]] = row[1];
+        });
+
+    cookies['PHPSESSID']  = homeRes.headers['set-cookie'][0].split(';')[0].split('=')[1];
+    cookies['layoutSize'] = homeRes.headers['set-cookie'][1].split(';')[0].split('=')[1]
+    headers['Cookie'] = toCookieHeaderString(cookies);
+
+    const settingsUrl = findUrl(mandator, homeRes.data, SETTINGS_PAGE_ID);
+
+    const settingsRes = await axios.get(settingsUrl, {
+        withCredentials: true,
+        headers: headers,
+        maxRedirects: 0
+    });
+   
+    const $settings = cheerio.load(settingsRes.data);
+   
+    const email = $settings('#f0').attr('value');
+    const privateEmail = $settings('#f1').attr('value');
+    
+    return {
+        mandator: mandator,
+        username: username,
+        name: infos['Name'],
+        address: infos['Adresse'],
+        zipCity: infos['Ort'],
+        birthdate: infos['Geburtsdatum'],
+        education: infos['Ausbildungsgang'],
+        hometown: infos['Heimatort'],
+        phone: infos['Telefon'],
+        mobile: infos['Mobiltelefon'],
+        email: email,
+        privateEmail: privateEmail,
+    }
+}
+
 async function getMarks(mandator, username, password) {
     console.log('Getting marks for: ' + username);
     let cookies = await getCookies(mandator, username, password);
@@ -123,7 +185,7 @@ async function getMarks(mandator, username, password) {
     cookies['layoutSize'] = homeRes.headers['set-cookie'][1].split(';')[0].split('=')[1]
     headers['Cookie'] = toCookieHeaderString(cookies);
 
-    const marksUrl = BASE_URL + mandator + '/' + homeRes.data.match('"(index\\.php\\?pageid=21311[^"]*)"')[1];
+    const marksUrl = findUrl(mandator, homeRes.data, MARKS_PAGE_ID);
 
     const marksRes = await axios.get(marksUrl, {
         withCredentials: true,
@@ -162,18 +224,14 @@ async function getMarks(mandator, username, password) {
                         .map(x => $(x).text().trim());
                         
                     const valuePoints = markRowCells[2].split('\n');
-
-                    const date = markRowCells[0];
-                    const title = markRowCells[1];
                     const value = valuePoints[0] ? valuePoints[0] : undefined;
                     const points = valuePoints[1] ? valuePoints[1].match('Punkte: (\\d*)')[1] : undefined;
-                    const weighting = markRowCells[3];
                     return {
-                        date: date,
-                        title: title,
+                        date: markRowCells[0],
+                        title: markRowCells[1],
                         value: value,
                         points: points,
-                        weighting: weighting
+                        weighting: markRowCells[3]
                     };
                 });
             return {
@@ -185,9 +243,12 @@ async function getMarks(mandator, username, password) {
         });
 } 
 
-
 async function getAbsences(mandator, username, password) {
     
+}
+
+function findUrl(mandator, html, pageid) {
+    return BASE_URL + mandator + '/' + html.match('"(index\\.php\\?pageid=' + pageid + '[^"]*)"')[1];
 }
 
 async function getCookies(mandator, username, password) {
@@ -229,6 +290,7 @@ axios.interceptors.response.use((response) => {
 
 module.exports = {
     authenticate,
+    getUserInfo,
     getMarks,
     getAbsences
 };
