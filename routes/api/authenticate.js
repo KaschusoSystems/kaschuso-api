@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
     const username = req.query.username;
     const password = req.query.password;
     authenticate(mandator, username, password).then(cookies => {
-        const authenticated = cookies && cookies.SCDID_S;
+        const authenticated = cookies && !!cookies.SCDID_S;
         return res.json({
             mandator: mandator,
             username: username,
