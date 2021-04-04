@@ -1,127 +1,73 @@
-require('dotenv').config();
-const cryptoRandomString = require('crypto-random-string');
+var http = require('http'),
+    path = require('path'),
+    methods = require('methods'),
+    express = require('express'),
+    bodyParser = require('body-parser'),
+    cors = require('cors'),
+    errorhandler = require('errorhandler')
 
-const axios = require('axios').default;
-// sslkeylog = require('sslkeylog');
-// sslkeylog.hookAll();
+var isProduction = process.env.NODE_ENV === 'production';
 
-axios.defaults.withCredentials = true;
-
-var qs = require('qs');
-
-const cheerio = require('cheerio');
-
-const DEFAULT_HEADERS = {
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,/;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Accept-Language': 'en-US,en;q=0.9,de-CH;q=0.8,de;q=0.7',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive',
-    'DNT': '1',
-    'Host': 'kaschuso.so.ch',
-    'Pragma': 'no-cache',
-    'sec-ch-ua': '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',
-    'sec-ch-ua-mobile': '?0',
-    'Sec-Fetch-Dest': 'document',
-    'Sec-Fetch-Mode': 'navigate',
-    'Sec-Fetch-Site': 'none',
-    'Sec-Fetch-User': '?1',
-    'Upgrade-Insecure-Requests': '1',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36'
-};
-
-const BASE_URL = 'https://kaschuso.so.ch/';
-const FORM_URL = 'https://kaschuso.so.ch/login/sls/auth?RequestedPage=%2f';
-const LOGIN_URL = 'https://kaschuso.so.ch/login/sls/';
-const SES_JS_URL = 'https://kaschuso.so.ch/sil-bid-check/ses.js';
-
-const SES_PARAM_REGEX = "var bid = getBid\\\('([^']*?)'";
-
-async function main() {
-    var session = await authenticate(process.env.MANDATOR, process.env.KASCHUSO_USERNAME, process.env.PASSWORD);
-
-    console.log(session);
+if (!isProduction) {
+    sslkeylog = require('sslkeylog');
+    sslkeylog.setLog('C:\\temp\\keylogfile.txt').hookAll();
 }
 
-async function authenticate(mandator, username, password) {
-    
-    let headers = Object.assign({}, DEFAULT_HEADERS);
+// Create global app object
+var app = express();
 
-    // set basic cookies to request login page
+app.use(cors());
 
-    const initRes = await axios.get(BASE_URL + mandator, {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0,
-    });
+// Normal express config defaults
+app.use(require('morgan')('dev'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-    SCDID_S = initRes.cookieValue[0].split(';')[0];
-    console.log('Got session id: ' + SCDID_S);
-    headers['Cookie'] = SCDID_S + '; SLSLanguage=de';
+app.use(require('method-override')());
 
-    console.log('Redirecting to: ' + initRes.locationValue);
-    await axios.get(initRes.locationValue, {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0,
-    });
-
-    // request login page
-
-    const formUrl = FORM_URL + mandator;
-
-    console.log('Requesting: ' + formUrl);
-    const formRes = await axios.get(formUrl, {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0,
-    });
-
-    console.log('Requesting: ' + SES_JS_URL);
-    const sesJS = await axios.get(SES_JS_URL, {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0,
-    });
-    
-    let param = sesJS.data.match(SES_PARAM_REGEX)[1];
-    let action = 'auth?' + param + '=' + cryptoRandomString({length: 32, type: 'hex'});
-
-    const currentRequestedPage = cheerio.load(formRes.data)('input[name=currentRequestedPage]').attr('value');
-    
-    let loginHeaders = Object.assign({}, headers);
-    loginHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
-
-    // make login
-
-    const loggedIn = await axios.post(LOGIN_URL + action, 
-        qs.stringify({
-            userid: username,
-            password: password,
-            currentRequestedPage: currentRequestedPage,
-        }),
-        {
-            withCredentials: true,
-            headers: loginHeaders,
-            maxRedirects: 0,
-        }
-    );
-    
-    var SCDID_S = loggedIn.cookieValue[0].split(';')[0];
-    console.log('Got session id: ' + SCDID_S);
-
-    return SCDID_S;
+if (!isProduction) {
+    app.use(errorhandler());
 }
 
-axios.interceptors.response.use((response) => {
-    return response;
-}, (error) => {
-    if (error.response.status === 302) {
-        const cookieValue = error.response.headers['set-cookie'];
-        const locationValue = error.response.headers.location;
-        return Promise.resolve({error, cookieValue, locationValue});
-    }
-    return Promise.reject(error);
+require('./services/kaschuso-api');
+
+app.use(require('./routes'));
+
+/// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
-main();
+/// error handlers
+
+// development error handler
+// will print stacktrace
+if (!isProduction) {
+    app.use(function(err, req, res, next) {
+        console.log(err.stack);
+
+        res.status(err.status || 500);
+
+        res.json({'errors': {
+            message: err.message,
+            error: err
+        }});
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.json({'errors': {
+        message: err.message,
+        error: {}
+    }});
+});
+
+// finally, let's start our server...
+var server = app.listen( process.env.PORT || 3001, function(){
+    console.log('Listening on port ' + server.address().port);
+});

@@ -1,21 +1,45 @@
 {
   "name": "kaschuso-api",
   "version": "1.0.0",
-  "description": "To the moon",
+  "description": "API wrapper for kaschuso.so.ch",
   "main": "app.js",
-  "repository": "git@github.com:GIBS-to-the-moon/kaschuso-api.git",
-  "author": "GIBS to the moon masters",
-  "license": "MIT",
+  "scripts": {
+    "start": "node ./app.js",
+    "dev": "nodemon ./app.js",
+    "test": "newman run ./tests/api-tests.postman.json -e ./tests/env-api-tests.postman.json",
+    "stop": "lsof -ti :3001 | xargs kill"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GIBS-to-the-moon/kaschuso-api.git"
+  },
   "dependencies": {
     "axios": "^0.21.1",
+    "body-parser": "1.15.0",
     "cheerio": "^1.0.0-rc.5",
+    "cors": "2.7.1",
     "crypto-random-string": "^3.3.1",
-    "dotenv": "^8.2.0",
-    "form-data": "^4.0.0",
+    "ejs": "2.4.1",
+    "errorhandler": "1.4.3",
+    "express": "4.13.4",
+    "express-jwt": "3.3.0",
+    "express-session": "1.13.0",
+    "jsonwebtoken": "7.1.9",
+    "method-override": "2.3.5",
+    "methods": "1.1.2",
+    "mongoose": "4.4.10",
+    "mongoose-unique-validator": "1.0.2",
+    "morgan": "1.7.0",
+    "passport": "0.3.2",
+    "passport-local": "1.0.0",
     "qs": "^6.10.1",
+    "request": "2.69.0",
+    "slug": "0.9.1",
     "sslkeylog": "^0.2.2",
-    "xmldom": "^0.5.0",
-    "xpath": "^0.0.32",
-    "xpath-html": "^1.0.2"
+    "underscore": "1.8.3"
+  },
+  "devDependencies": {
+    "newman": "^3.8.2",
+    "nodemon": "^1.11.0"
   }
 }
