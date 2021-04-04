@@ -100,6 +100,12 @@ async function authenticate(mandator, username, password) {
             maxRedirects: 0
         }
     );
+
+    if (!loginRes.cookieValue) {
+        const error =  new Error('username or password invalid');
+        error.name = 'AuthenticationError';
+        throw error;
+    }
     
     cookies['SCDID_S'] = loginRes.cookieValue[0].split(';')[0].split('=')[1];
 

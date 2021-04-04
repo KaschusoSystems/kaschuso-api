@@ -14,7 +14,13 @@ router.get('/', function(req, res, next) {
             username: username,
             authenticated: authenticated 
         });
-    }).catch(next);
+    }).catch(error => {
+        return res.json({
+            mandator: mandator,
+            username: username,
+            authenticated: false 
+        });
+    });
 });
 
 module.exports = router;

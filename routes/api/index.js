@@ -13,6 +13,8 @@ router.use(function(err, req, res, next){
             return errors;
         }, {})
         });
+    } else if (err.name === 'AuthenticationError') {
+        return res.status(401).json({ error: err.message });
     }
     return next(err);
 });
