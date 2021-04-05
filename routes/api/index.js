@@ -2,7 +2,7 @@ var router = require('express').Router();
 
 router.use('/authenticate', require('./authenticate'));
 router.use('/user', require('./user'));
-router.use('/marks', require('./marks'));
+router.use('/grades', require('./grades'));
 router.use('/absences', require('./absences'));
 
 router.use(function(err, req, res, next){

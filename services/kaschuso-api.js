@@ -12,7 +12,7 @@ const LOGIN_URL  = BASE_URL + 'login/sls/';
 const SES_JS_URL = BASE_URL + 'sil-bid-check/ses.js';
 
 
-const MARKS_PAGE_ID    = 21311;
+const GRADES_PAGE_ID    = 21311;
 const ABSENCES_PAGE_ID = 21111;
 const SETTINGS_PAGE_ID = 22500;
 
@@ -160,21 +160,21 @@ async function getUserInfo(mandator, username, password) {
     }
 }
 
-async function getMarks(mandator, username, password) {
-    console.log('Getting marks for: ' + username);
+async function getGrades(mandator, username, password) {
+    console.log('Getting grades for: ' + username);
     
     const { headers, homeData } = await getHomepageAndHeaders(mandator, username, password);
 
-    const marksRes = await axios.get(findUrl(mandator, homeData, MARKS_PAGE_ID), {
+    const gradesRes = await axios.get(findUrl(mandator, homeData, GRADES_PAGE_ID), {
         withCredentials: true,
         headers: headers,
         maxRedirects: 0
     });
 
-    const $ = cheerio.load(marksRes.data);
+    const $ = cheerio.load(gradesRes.data);
 
     return $('#uebersicht_bloecke>page>div>table')
-        // find table with marks for each subject
+        // find table with grades for each subject
         .find('tbody>tr>td>table')
         .toArray()
         .map(x => {
@@ -188,8 +188,8 @@ async function getMarks(mandator, username, password) {
             const name = subjectsRowCells[0].match('<br>([^<]*)')[1];
             const average = subjectsRowCells[1].trim();
             
-            // find all marks for a subject 
-            const marks = $(x).find('tbody>tr')
+            // find all grades for a subject 
+            const grades = $(x).find('tbody>tr')
                 .toArray()
                 // filter header row and totalizer row
                 .filter(x => !$(x).find('td>i')[0])
@@ -214,7 +214,7 @@ async function getMarks(mandator, username, password) {
                 class: clazz,
                 name: name,
                 average: average,
-                marks: marks
+                grades: grades
             };
         });
 } 
@@ -233,7 +233,7 @@ async function getAbsences(mandator, username, password) {
     const $ = cheerio.load(absencesRes.data);
     
     return $('#uebersicht_bloecke>page>div>form>table')
-        // find table with marks for each subject
+        // find table with grades for each subject
         .find('tbody>tr')
         .toArray()
         // filter totalizer row
@@ -338,6 +338,6 @@ axios.interceptors.response.use((response) => {
 module.exports = {
     authenticate,
     getUserInfo,
-    getMarks,
+    getGrades,
     getAbsences
 };

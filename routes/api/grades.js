@@ -1,4 +1,4 @@
-const { getMarks } = require('../../services/kaschuso-api');
+const { getGrades } = require('../../services/kaschuso-api');
 
 var router = require('express').Router();
 
@@ -6,11 +6,11 @@ router.get('/', function(req, res, next) {
     const mandator = req.query.mandator;
     const username = req.query.username;
     const password = req.query.password;
-    getMarks(mandator, username, password).then(marks => {
+    getGrades(mandator, username, password).then(grades => {
         return res.json({
             mandator: mandator,
             username: username,
-            marks: marks 
+            grades: grades 
         });
     }).catch(next);
 });
