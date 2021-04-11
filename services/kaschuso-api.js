@@ -359,6 +359,7 @@ function getCookiesFromHeaders(headers) {
     }
     return cookies;
 }
+
 axios.interceptors.response.use((response) => {
     response.cookies = getCookiesFromHeaders(response.headers);
     return response;
@@ -376,5 +377,7 @@ module.exports = {
     getUserInfo,
     getGrades,
     getAbsences,
-    getMandators
+    getMandators,
+    // for testing 
+    getCookiesFromHeaders
 };
