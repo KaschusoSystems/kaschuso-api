@@ -43,20 +43,13 @@ var cookiesMap = [];
  * Returns the first cookie that is essential to make *any* request.
  */
 async function basicAuthenticate() {
-    let headers = Object.assign({}, DEFAULT_HEADERS);
-
-    // set basic cookies to visit any page
-
-    const initRes = await axios.get(BASE_URL, {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0
-    });
-
-    return {
-        SCDID_S: initRes.cookieValue[0].split(';')[0].split('=')[1],
-        SLSLanguage: 'de'
-    };
+    return axios.get(BASE_URL, {
+            withCredentials: true,
+            headers: DEFAULT_HEADERS,
+            maxRedirects: 0
+        }).then(res => {
+            return res.cookies;
+        });
 }
 
 async function authenticate(mandator, username, password) {
@@ -105,14 +98,14 @@ async function authenticate(mandator, username, password) {
         }
     );
     
-    if (!loginRes.cookieValue) {
+    if (!loginRes.cookies) {
         const error =  new Error('username or password invalid');
         error.name = 'AuthenticationError';
         throw error;
     }
     
-    cookies['SCDID_S'] = loginRes.cookieValue[0].split(';')[0].split('=')[1];
-
+    cookies = { ...cookies, ...loginRes.cookies };
+    
     storeCookies(mandator, username, cookies);
 
     return cookies;
@@ -304,9 +297,7 @@ async function getHomepageAndHeaders(mandator, username, password) {
             headers: headers,
             maxRedirects: 0
         }).then(res => {
-    
-            cookies['PHPSESSID']  = res.headers['set-cookie'][0].split(';')[0].split('=')[1];
-            cookies['layoutSize'] = res.headers['set-cookie'][1].split(';')[0].split('=')[1]
+            cookies = { ...cookies, ...res.cookies };
             headers['Cookie'] = toCookieHeaderString(cookies);
             return {
                 headers: headers,
@@ -358,13 +349,24 @@ function toCookieHeaderString(cookies) {
     return headerString;
 }
 
+function getCookiesFromHeaders(headers) {
+    const cookies = {};
+    if (headers['set-cookie']) {
+        headers['set-cookie'].forEach(cookie => {
+            const keyValue = cookie.split(';')[0].split('=');
+            cookies[keyValue[0]] = keyValue[1];
+        });
+    }
+    return cookies;
+}
 axios.interceptors.response.use((response) => {
+    response.cookies = getCookiesFromHeaders(response.headers);
     return response;
 }, (error) => {
     if (error.response.status === 302) {
-        const cookieValue = error.response.headers['set-cookie'];
+        const cookies = getCookiesFromHeaders(error.response.headers);
         const locationValue = error.response.headers.location;
-        return Promise.resolve({error, cookieValue, locationValue});
+        return Promise.resolve({error, cookies, locationValue});
     }
     return Promise.reject(error);
 });
