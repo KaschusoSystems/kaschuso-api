@@ -6,7 +6,7 @@ router.get('/', function(req, res, next) {
     const mandator = req.query.mandator;
     const username = req.query.username;
     const password = req.query.password;
-    getGrades(mandator, username, password).then(grades => {
+    getGrades(mandator, username, password).then(subjects => {
         return res.json({
             mandator: mandator,
             username: username,
