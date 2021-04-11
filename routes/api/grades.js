@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
         return res.json({
             mandator: mandator,
             username: username,
-            grades: grades 
+            subjects: subjects 
         });
     }).catch(next);
 });
