@@ -1,0 +1,2879 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link href="https://kaschuso.so.ch/_framework_40630/font-awesome/css/all.min.css" rel="stylesheet">
+        <script defer src="https://kaschuso.so.ch/_framework_40630/material-design-lite/dist/material.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://kaschuso.so.ch/_framework_40630/material-design-lite/dist/material-schulnetz-blue.min.css">
+
+        <link rel="stylesheet" href="https://kaschuso.so.ch/_framework_40630/javascript/dialog/dialog-polyfill.css">
+    <script src="https://kaschuso.so.ch/_framework_40630/javascript/dialog/dialog-polyfill.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://kaschuso.so.ch/_framework_40630/javascript/material-datepicker-1.0.9/dist/material-datepicker.css">
+    <script type="text/javascript" src="https://kaschuso.so.ch/_framework_40630/javascript/material-datepicker-1.0.9/dist/material-datepicker-with-moment-js.min.js"></script>
+
+        <SCRIPT type="text/javascript" language="JavaScript"  src="https://kaschuso.so.ch/_framework_40630/javascript/prototype/prototype.js"></script>
+    <SCRIPT type="text/javascript" language="JavaScript"  src="https://kaschuso.so.ch/_framework_40630/javascript/prototype/scriptaculous/scriptaculous.js"></script>
+
+        
+
+    
+
+        <link rel="stylesheet" href="https://kaschuso.so.ch/_schulnetz_40630/css/flat/get_css.php"	type="text/css" media="all" />
+            	<link rel="stylesheet" href="https://kaschuso.so.ch/_schulnetz_40630/css/flat/print.css" type="text/css" media="print" />
+    	<script type="text/javascript" language="JavaScript" src="https://kaschuso.so.ch/_framework_40630/javascript/get_js.php"></script>
+    	<script type="text/javascript">var xajaxRequestUri="https://kaschuso.so.ch/gibsso/xajax_js.php?pageid=22500&id=f0c039a84fc469e6&transid=d5cf03";</script>
+	<script type="text/javascript" language="JavaScript" src="https://kaschuso.so.ch/gibsso/xajax_js.php?xajaxjs=xajaxjs&cache_control=https://kaschuso.so.ch/_framework_40630/javascript/"></script>
+    	<script type="text/javascript" language="JavaScript" src="https://kaschuso.so.ch/_framework_40630/javascript/toggle.js"></script>
+
+    
+
+        
+        
+        
+        
+                <script src="https://kaschuso.so.ch/_framework_40630/javascript/Croppie-2.4.1/croppie.min.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="https://kaschuso.so.ch/_framework_40630/javascript/Croppie-2.4.1/croppie.css" type="text/css">
+    
+        
+    <title>schulNetz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="apple-touch-icon" sizes="180x180" href="https://kaschuso.so.ch/_schulnetz_40630/favicons/sn/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://kaschuso.so.ch/_schulnetz_40630/favicons/sn/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://kaschuso.so.ch/_schulnetz_40630/favicons/sn/favicon-16x16.png">
+    <link rel="manifest" href="https://kaschuso.so.ch/_schulnetz_40630/favicons/sn/site.webmanifest" crossorigin="use-credentials">
+    <link rel="mask-icon" href="https://kaschuso.so.ch/_schulnetz_40630/favicons/sn/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="https://kaschuso.so.ch/_schulnetz_40630/favicons/sn/favicon.ico">
+    <meta name="msapplication-TileColor" content="#5bbad5">
+    <meta name="msapplication-config" content="https://kaschuso.so.ch/_schulnetz_40630/favicons/sn/browserconfig.php?path=https://kaschuso.so.ch/_schulnetz_40630/favicons/sn/">
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<body class="layout-md">
+<div id="backgroundBanner"></div>
+<div id="footer"></div>
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<div class='mdl-layout mdl-js-layout mdl-layout--fixed-header' id='global-container'><script language="JavaScript" type="text/javascript">
+    let duration = 11700;
+    let loginUrl = 'https://kaschuso.so.ch/gibsso/index.php?pageid=22500&id=f0c039a84fc469e6&transid=d5cf03';
+    let saveScrollPos = false;
+    let resetScrollPos = false;
+    let menuScrollOffset = 0;
+let maxScrollRight = 0;
+let navListMainShow = false;
+let menuIconsWidth = 0;
+let lastShift = -1;
+
+let iconIndex = 0;
+
+let layoutSizeCookie = 'layout-size';
+
+function toggleNavDrawer() {
+    var drawer = $('nav-drawer');
+
+    if(drawer.hasClassName('is-small-screen')) {
+        drawer.addClassName('mdl-layout--fixed-drawer');
+        drawer.MaterialLayout.toggleDrawer();
+    } else {
+        if(drawer.hasClassName('mdl-layout--fixed-drawer')) {
+            drawer.removeClassName('mdl-layout--fixed-drawer');
+            setCookie("menuHidden","1",10);
+        } else {
+            drawer.addClassName('mdl-layout--fixed-drawer');
+            setCookie("menuHidden","0",10);
+        }
+    }
+}
+
+function toggleNavListMainList() {
+
+    let main = document.getElementsByClassName("cls-page--mainnav-small--list");
+    let icon = $('mainnav-small--icon');
+    for (let i = 0; i < main.length; i++) {
+        navListMainShow ? main[i].hide() : main[i].show();
+    }
+
+    if(navListMainShow) {
+        icon.removeClassName('fa-chevron-up');
+        icon.addClassName('fa-chevron-down');
+    } else {
+        icon.removeClassName('fa-chevron-down');
+        icon.addClassName('fa-chevron-up');
+    }
+
+    navListMainShow = !navListMainShow;
+}
+
+function toggleScrollBtnDisabled() {
+    $('menu-scroll-left').disabled = (menuScrollOffset) >= 0;
+    $('menu-scroll-right').disabled = (menuIconsWidth + menuScrollOffset) <= $('nav-main-menu').offsetWidth;
+}
+
+function menuScrollIcon(forward) {
+    const menuElements = $$('.cls-page--mainmenu-element');
+    let iconWidth = menuElements[iconIndex].offsetWidth;
+    if (forward) {
+        let iconWidth = menuElements[iconIndex].offsetWidth;
+        let remainingWidth = menuIconsWidth + menuScrollOffset - $('nav-main-menu').offsetWidth;
+        if(remainingWidth < iconWidth) {
+            menuScroll(-remainingWidth);
+            lastShift = remainingWidth;
+        } else {
+            menuScroll(-iconWidth);
+            iconIndex++;
+        }
+    } else {
+        let iconWidth = menuElements[iconIndex-1].offsetWidth;
+        if(lastShift === -1) {
+            menuScroll(iconWidth);
+            iconIndex--;
+        } else {
+            menuScroll(lastShift);
+            lastShift = -1;
+        }
+    }
+}
+
+function menuScroll(scrollOffset) {
+
+    // falls nach links gescrollt werden soll, das menü aber schon linksbündig ist
+    if(scrollOffset > 0 && menuScrollOffset >= 0) {
+        return;
+    }
+    // falls nach rechts gescrollt werden soll, es aber nicht mehr weiter nach rechts geht
+    if(scrollOffset < 0 && menuIconsWidth + menuScrollOffset <= $('nav-main-menu').offsetWidth) {
+        return;
+    }
+
+    menuScrollOffset += scrollOffset;
+
+    toggleScrollBtnDisabled();
+
+    const menuElements = $$('.cls-page--mainmenu-element');
+    for(let i = 0; i < menuElements.length; i++) {
+        menuElements[i].setStyle({
+            'left':menuScrollOffset+'px'
+        });
+    }
+}
+
+function toggleCard(id) {
+    let content = $(id + '_card_content');
+    let actions = $(id + '_card_actions');
+    let buttonClass = null;
+    if (content.style.display === "none") {
+        content.show();
+        if(actions) {
+            actions.show();
+        }
+        buttonClass = "fa-chevron-up";
+    } else {
+        content.hide();
+        if(actions) {
+            actions.hide();
+        }
+        buttonClass = "fa-chevron-down";
+    }
+
+    $(id + '_toggle_button').innerHTML = "<i class='fas " + buttonClass + " fa-xs'></i>";
+}
+
+function getNavMenuWidth() {
+    const totalWidth = $('header-menu').offsetWidth - 40;
+
+    // Elemente welche immer im Header vorhanden sind
+    let navMenuWidth = totalWidth - $('logo-span').offsetWidth - $('sn-gradient').offsetWidth - $('sn-main-menu').offsetWidth;
+
+    // Elemente welche nur auf gewissen Seiten im Header vorhanden sind
+    // Schulnetz
+    let iconssn = ['nav-semester', 'nav-datumsrange', 'readonly-mode', 'application-type', 'sn-timer', 'sn-bookmarks', 'switch-mode'];
+
+    // tagiNet
+    let iconstn = ['nav-info1month', 'nav-info1date', 'nav-info2dates', 'nav-info1year', 'nav-info2month', 'nav-info1month1date', 'tn-bookmarks','tn-timer','nav-wechselzu'];
+
+    let icons = iconssn.concat(iconstn);
+
+    for(let i = 0; i < icons.length; i++) {
+        let icon = document.getElementById(icons[i]);
+        // Elemente welche nur auf gewissen Seiten im Header vorhanden sind, hier muss jeweils geprüft werden ob vorhanden
+        if(icon != undefined && icon.offsetWidth != undefined) {
+            navMenuWidth -= icon.offsetWidth;
+        }
+    }
+
+    return navMenuWidth;
+}
+
+function resizeHeaderRow() {
+
+    let scrollLeft = $('menu-scroll-left');
+    let navMainMenu = $('nav-main-menu');
+    let navSmallMenu = $('mainnav-small');
+    let scrollRight = $('menu-scroll-right');
+
+    // Breite der eigentlichen Navigationsleiste berechnen
+    let navMenuWidth = getNavMenuWidth();
+
+    // wenn navMenu zu klein, wird's in der Seitenleiste angezeigt
+    if(navMenuWidth < 300) {
+        navMainMenu.hide();
+        scrollLeft.hide();
+        scrollRight.hide();
+        if(navSmallMenu) {
+            navSmallMenu.show();
+        }
+    } else {
+
+        if(navListMainShow) {
+            toggleNavListMainList();
+        }
+
+        if(navSmallMenu) {
+            navSmallMenu.hide();
+        }
+
+        // Breite auf Auto zurücksetzen damit mit offsetWidth die genaue Breite ermittelt werden kann
+        navMainMenu.style.display = 'flex';
+        navMainMenu.style.width = 'auto';
+
+        scrollLeft.hide();
+        scrollRight.hide();
+
+        if(navMainMenu.offsetWidth > navMenuWidth) {
+            scrollLeft.show();
+            scrollRight.show();
+
+            navMenuWidth -= scrollLeft.offsetWidth;
+            navMenuWidth -= scrollRight.offsetWidth;
+
+            maxScrollRight = navMainMenu.offsetWidth - navMenuWidth;
+            toggleScrollBtnDisabled();
+        } else {
+            menuScroll(-menuScrollOffset);
+        }
+
+        navMainMenu.style.width = navMenuWidth+'px';
+        navMainMenu.style.overflow = 'hidden';
+    }
+}
+
+function scrollToActiveMenu() {
+
+    menuScroll(-menuScrollOffset);
+    lastShift = -1;
+    iconIndex = 0;
+
+    let activeOffset = 0;
+    const menuElements = $$('.cls-page--mainmenu-element');
+    for(let i = 0; i < menuElements.length; i++) {
+        activeOffset += menuElements[i].offsetWidth;
+        if(menuElements[i].hasClassName('cls-page--mainmenu-active')) {
+            break;
+        }
+    }
+
+    while(activeOffset + menuScrollOffset > $('nav-main-menu').offsetWidth) {
+        // solange das acktive Menu-Icon nicht sichbar ist, weiterblättern
+        menuScrollIcon(true);
+    }
+}
+
+/*
+ * Set layout depending elements
+ */
+function setLayoutSize(layoutSize) {
+    setCookie(layoutSizeCookie, layoutSize, 365);
+    switch(layoutSize) {
+        case 'sm':
+            selElement='layout-sel-sm';
+            break;
+        case 'md':
+            selElement='layout-sel-md';
+            break;
+        default:
+            selElement='layout-sel-lg';
+    }
+
+    document.getElementById('layout-sel-sm').classList.remove('cls-menu--selected-layout');
+    document.getElementById('layout-sel-md').classList.remove('cls-menu--selected-layout');
+    document.getElementById('layout-sel-lg').classList.remove('cls-menu--selected-layout');
+    document.getElementById(selElement).classList.add('cls-menu--selected-layout');
+
+    document.body.classList.remove('layout-sm');
+    document.body.classList.remove('layout-md');
+    document.body.classList.remove('layout-lg');
+    document.body.classList.add('layout-'+layoutSize);
+}
+
+function intersectionStickyCallback(records, observer) {
+    for(let i = 0; i < records.length; i++) {
+        let record = records[i];
+        // Sticky-Element zu diesem Sentinel ermitteln
+        const _target = record.target.parentElement;
+        const _position = record.target.dataset.sentinelPosition;
+        const _stuck = !record.isIntersecting;
+        document.dispatchEvent(new CustomEvent('sticky-change', {detail: {stuck: _stuck, target: _target, position: _position}}));
+    }
+}
+
+window.addEventListener('resize', function(event){
+    resizeHeaderRow();
+    toggleScrollBtnDisabled();
+    scrollToActiveMenu();
+});
+
+window.addEventListener('load', function(event){
+    const menuElements = $$('.cls-page--mainmenu-element');
+    for(let i = 0; i < menuElements.length; i++) {
+        menuIconsWidth += menuElements[i].offsetWidth;
+    }
+
+    resizeHeaderRow();
+    toggleScrollBtnDisabled();
+    scrollToActiveMenu();
+
+    // Textareas kriegen einen length validator
+    let textareas = document.getElementsByClassName('mdl-textarea');
+    for(let i = 0; i < textareas.length; i++) {
+        textareas[i].addEventListener('keyup', function(e){
+            const maxlength = parseInt(this.dataset.maxLength);
+
+            if(isNaN(maxlength)) {
+                return;
+            }
+
+            if(this.value.length > maxlength) {
+                this.parentElement.addClassName('is-invalid');
+                this.setCustomValidity(this.dataset.maxLengthError);
+            } else {
+                this.parentElement.removeClassName('is-invalid');
+                this.setCustomValidity('');
+            }
+        });
+    }
+
+});
+
+    
+    // duration = 70;
+    // Zeit ab wann der Timeout beginnt
+    let start = Date.now();
+    // Flag ob die Warnung angezeigt wurde
+    let alert_shown = reload_initiated = false;
+
+    // Diese Funktion wird über AJAX aufgerufen um den Timer neu zu initialisieren
+    function init_timer() {
+        // Falls die Meldung angeziegt wird, muss sie wieder ausgeblendet werden
+        alert_shown = false;
+        // Der Logout-Timer gilt neu ab jetzt
+        start = Date.now();
+        // Tooltip-Hintergrund wieder zurücksetzen
+        $('sn-timer-tooltip').setStyle({'background-color': 'rgba(97, 97, 97, 0.9)'});
+        // Timer-Zirkel wieder zurücksetzen
+        $('circle-progress').style.fill = "none";
+        $('circle-progress').style.stroke = "#e6e6e6";
+        // Timer updaten
+        timer();
+    }
+
+    function setProgressPercent(percent) {
+        let offset = 339.292 * (1 - (percent/100));
+        $('circle-progress').style.strokeDashoffset = offset;
+    }
+
+    // Diese Funktion updated periodisch den Timer
+    function timer() {
+        // Verbelibende Zeit ermitteln
+        let diff = duration - ((Date.now() - start)/1000);
+        diff = Math.floor(diff);
+
+        // Wenn Logout-Zeit abgelaufen ist
+        if(diff < 0) {
+
+            if(reload_initiated)
+                return;
+
+            // formChanged zurücksetzen damit das Alert beim wegnavigieren von einem nicht gespeicherten Formular nicht angezeigt wird
+            formChanged = false;
+            // Auf die Login-Seite weiterleiten
+            setTimeout(function() {
+                window.location = loginUrl;
+            }, 5000);
+
+            reload_initiated = true;
+
+            return;
+        }
+
+        // Falls nur noch eine Minute Login-Zeit bleibt, und die meldung noch nicht angezeigt wurde
+        if(diff < 60 && alert_shown === false) {
+            // Festhalten dass die Meldung angezeigt wurde
+            alert_shown = true;
+
+            $('sn-timer-tooltip').setStyle({'background-color': 'rgba(197, 78, 78, 0.9)'});
+            // Timer-Zirkel wieder zurücksetzen
+            $('circle-progress').style.fill = "rgba(197, 78, 78, 0.6)";
+            $('circle-progress').style.stroke = "rgb(220, 78, 78)";
+
+            // Meldung anzeigen
+            const txt = 'Ihre Sitzung läuft in einer Minute ab. Klicken Sie auf Verlängern oder oben rechts auf die Zeitanzeige um die Sitzung zu verlängern.';
+            showSnackbar({
+                message: txt,
+                actionHandler: function() {
+                    xajax_reset_timeout();
+                    const snackbarContainer = document.querySelector('#mdl-toast');
+                    snackbarContainer.MaterialSnackbar.cleanup_();
+                },
+                actionText: 'Verlängern',
+                timeout: 60000
+            });
+        }
+
+        // Verbleibende Sekunden zu HH:MM:SS umformatieren
+        const days = Math.floor(diff/(24*60*60));
+        let leftSec = diff - days * 24*60*60;
+        const hrs = Math.floor(leftSec/(60*60));
+        leftSec = leftSec - hrs * 60*60;
+        const min = Math.floor(leftSec/(60));
+        const sec = leftSec - min * 60;
+        let time =  pad(hrs, 2) + ":" + pad(min, 2) + ":" + pad(sec, 2);
+
+        // Total Minuten rechnen
+        let minTotal = min + (60 * hrs);
+        if(minTotal > 60) {
+            minTotal = "60+";
+        } else {
+            minTotal = "" + minTotal + "'";
+        }
+
+        // Falls man unter einer Minute ist, wird der Timer rot angezeigt
+        if(alert_shown === true) {
+            $('timer').innerHTML = "" + pad(sec, 2) + "''";
+        } else {
+            $('timer').innerHTML = minTotal;
+        }
+
+        let percent = sec*100/60;
+        setProgressPercent(percent);
+
+        // Timer updaten
+        $('sn-timer-tooltip').innerHTML = time;
+
+    }
+
+    function pad(n, width) {
+        n = n + '';
+        return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+    }
+
+    // Wenn die Seite geladen ist, wird jede 500 milisekunden der Timer aktualisiert
+    window.addEventListener('load', function(){
+        timer();
+        setInterval(timer, 500);
+    });
+
+</script>
+<header class="titelleiste mdl-layout__header cls-page--header mdl-layout__header--seamed">    <div id="mdl-toast" class="mdl-js-snackbar mdl-snackbar"><div class="mdl-snackbar__text"></div><button class="mdl-snackbar__action" type="button"></button></div><div class="mdl-layout__header-row cls-page--header-row header-menu mdl-layout__header--seamed" id="header-menu"><span class="cls-page--header-row--logo-span" id="logo-span"><button class="mdl-button mdl-js-button mdl-button--icon mdl-button--icon--large mdl-button--colored" onclick="toggleNavDrawer();" id="menu-toggle-button"><i class="far fa-bars fa-xs"></i></button><div class='mdl-tooltip mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--large mdl-tooltip--l-width ' for='menu-toggle-button' id='mdl_tooltip_menu-toggle-button'>Menü ein-/ausblenden</div><span class="cls-page--header-row--logo-container"><img class="cls-page--header-row--sn-logo" src="https://kaschuso.so.ch/_schulnetz_40630/css/flat/images/snlogo-192x192.png"/></span></span><span class="cls-page--header-row--logo-gradient" id="sn-gradient"></span><button id="menu-scroll-left" class="mdl-button mdl-js-button mdl-button--icon" disabled style="display: none;" onclick="menuScrollIcon(false);"><i class="far fa-chevron-left fa-xs"></i></button><nav class="mdl-navigation cls-page--mainmenu" id="nav-main-menu"><a href="index.php?pageid=1&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-navigation__link cls-page--mainmenu-active cls-page--mainmenu-element cls-page--mainmenu-icon" id="menu1"><i class="fa-home fas fa-lg"></i><div class="cls-page--mainmenu-subtitle no-outline" id="menu_title_1">Start</div></a><a href="index.php?pageid=21311&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-navigation__link  cls-page--mainmenu-element cls-page--mainmenu-icon" id="menu21311"><i class="fa-graduation-cap fas fa-lg"></i><div class="cls-page--mainmenu-subtitle no-outline" id="menu_title_21311">Noten</div></a><a href="index.php?pageid=21111&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-navigation__link  cls-page--mainmenu-element cls-page--mainmenu-icon" id="menu21111"><i class="fa-user-check fas fa-lg"></i><div class="cls-page--mainmenu-subtitle no-outline" id="menu_title_21111">Absenzen</div></a><a href="index.php?pageid=21200&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-navigation__link  cls-page--mainmenu-element cls-page--mainmenu-icon" id="menu21200"><i class="fa-calendar-alt far fa-lg"></i><div class="cls-page--mainmenu-subtitle no-outline" id="menu_title_21200">Agenda</div></a><a href="index.php?pageid=24030&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-navigation__link  cls-page--mainmenu-element cls-page--mainmenu-icon" id="menu24030"><i class="fa-cloud fas fa-lg"></i><div class="cls-page--mainmenu-subtitle no-outline" id="menu_title_24030">Listen&amp;Dokumente</div></a></nav><button id="menu-scroll-right" class="mdl-button mdl-js-button mdl-button--icon" style="display: none;" onclick="menuScrollIcon(true);"><i class="far fa-chevron-right fa-xs"></i></button><div class="mdl-layout-spacer"></div>
+
+
+
+
+
+
+
+<div class="timer-holder" id="sn-timer" style="position: relative; float: left; margin: 0 5px;" onclick="xajax_reset_timeout(); closeSnackbar();">
+    <span id="timer" class="timer-value" style="text-align:center; position: absolute; line-height: 24px; width: 100%; font-size: 10px; z-index: 10;">0</span>
+    <svg width="24" height="24" viewBox="0 0 120 120" style="-webkit-transform: rotate(-90deg); transform: rotate(-90deg);">
+        <circle id="circle-progress" cx="60" cy="60" r="54" fill="none" stroke="#fff" stroke-width="12" stroke-dasharray="339.292"/>
+    </svg>
+</div>
+
+<div class="mdl-tooltip mdl-tooltip--left mdl-tooltip--large" id="sn-timer-tooltip" for="sn-timer">
+    +timeout+
+</div>
+
+    <button id="sn-bookmarks" class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="far fa-bookmark fa-xs"></i>
+    </button>
+    <div class="mdl-tooltip mdl-tooltip--left mdl-tooltip--large" for="sn-bookmarks">
+        Ihre Lesezeichen
+    </div>
+        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="sn-bookmarks">
+                                            <a href="index.php?pageid=10050&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-menu__item">Filestore - Dokumente verwalten</a>
+                                                <a href="index.php?pageid=21312&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-menu__item">Noten - Prüfungspläne einsehen</a>
+                                                <a href="index.php?pageid=22202&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-menu__item">Stundenplan - Schülerpläne</a>
+                                        <a href="index.php?pageid=22500&id=f0c039a84fc469e6&amp;transid=d5cf03&action=addbookmark" class="mdl-menu__item">Diese Seite hinzufügen</a>
+            </ul>
+        <button id="sn-main-menu" class="mdl-button mdl-js-button mdl-button--icon "data-badge="" style="--badge-color: #CD4C44;"><i class="far fa-ellipsis-v fa-xs"></i></button><div class="mdl-tooltip mdl-tooltip--left mdl-tooltip--large" for="sn-main-menu">Menü</div>        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-cascading-menu" for="sn-main-menu">            <li class="supernav__list-item" role="menuitem"><a href="index.php?pageid=9999&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-menu__item"><i class="fal fa-sign-out-alt fa-lg sn-menu-icon"></i> Abmelden</a></li>                        <li class="supernav__list-item" role="menuitem"><button type="button" class="mdl-menu__item mdl-menu-cascade__open-sub" id="mein_schulnetz"><i class="fal fa-chevron-left fa-lg sn-menu-icon"></i> mein schulNetz</button></li>                                    <li class="supernav__list-item" role="menuitem"><button type="button" class="mdl-menu__item mdl-menu-cascade__open-sub" id="change_style"><i class="fal fa-chevron-left fa-lg sn-menu-icon"></i> Layout</button></li>            <li class="supernav__list-item" role="menuitem"><a href="about.php?id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-menu__item" onclick="javascript:openpopup('about.php',350,150); return false;" target="_blank"><i class="fal fa-info-circle fa-lg sn-menu-icon"></i> About</a></li>            </ul><ul class="mdl-menu mdl-js-cascading-menu mdl-menu--bottom-left" for="change_style"><li><button type="button" class="mdl-menu__item mdl-menu__item-noclose " onclick="setLayoutSize('lg')" id="layout-sel-lg">Ausgedehnt</button></li><li><button type="button" class="mdl-menu__item mdl-menu__item-noclose cls-menu--selected-layout" onclick="setLayoutSize('md')" id="layout-sel-md">Standard</button></li><li><button type="button" class="mdl-menu__item mdl-menu__item-noclose " onclick="setLayoutSize('sm')" id="layout-sel-sm">Kompakt</button></li></ul><ul class="mdl-menu mdl-js-cascading-menu mdl-menu--bottom-left" for="mein_schulnetz"><li><a href="index.php?pageid=22500&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-menu__item">Einstellungen</a></li><li><a href="index.php?pageid=22501&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-menu__item">Passwort ändern</a></li></ul></div></header>
+
+<main class='mdl-layout__content'>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer" id="nav-drawer">
+        <div class="mdl-layout__drawer cls-page--navdrawer" id="nav-drawer-content">
+            <nav class="mdl-navigation cls-page--navlist" id="navigation-list">
+                                    <div class="mdl-navigation__link cls-page--mainnav-small cls-page--leftmenu-active" style="display: none;" id="mainnav-small" onclick="toggleNavListMainList();"><i class="fa-home fas fa-lg"></i>&nbsp;&nbsp;Startseite<button class="mdl-button mdl-js-button mdl-button--icon cls-page--mainnav-small--button"><i id="mainnav-small--icon" class="fa-chevron-down fas"></i></button>
+                    </div>
+                                                                                                                    <a href="index.php?pageid=21311&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-navigation__link cls-page--mainnav-small--list" style="display: none;"><i class="fa-graduation-cap fas fa-lg"></i>&nbsp;&nbsp;Noten</a>
+                                                                                                <a href="index.php?pageid=21111&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-navigation__link cls-page--mainnav-small--list" style="display: none;"><i class="fa-user-check fas fa-lg"></i>&nbsp;&nbsp;Absenzen</a>
+                                                                                                <a href="index.php?pageid=21200&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-navigation__link cls-page--mainnav-small--list" style="display: none;"><i class="fa-calendar-alt far fa-lg"></i>&nbsp;&nbsp;Agenda</a>
+                                                                                                <a href="index.php?pageid=24030&id=f0c039a84fc469e6&amp;transid=d5cf03" class="mdl-navigation__link cls-page--mainnav-small--list" style="display: none;"><i class="fa-cloud fas fa-lg"></i>&nbsp;&nbsp;Listen&amp;Dokumente</a>
+                                                                                                                                                                                                                                                    </nav>
+            <div id="clsSublist" class="cls-page--navsublist">
+            </div>
+        </div>
+        <main class="mdl-layout__content">
+            <div class='mdl-card mdl-shadow--2dp cls-page--content-card' id="content-card">
+                
+
+<script type="text/javascript">
+    
+
+    function setFormChanged() {
+        formChanged = true;
+    }
+
+    function showSmartyErrors() {
+        const smartyErrors = document.getElementsByClassName('errormessage');
+        for(let i = 0; i < smartyErrors.length; i++) {
+            const error = smartyErrors[i];
+            if(error.innerText.length > 0) {
+                error.parentElement.classList.add('is-smarty-invalid');
+            }
+        }
+    }
+
+    function focusField(id) {
+        const cardFields = $(id).closest('.mdl-card--cls-form-fields');
+
+        if (cardFields.style.display === "none") {
+            // falls das Feld in einer eingefahrenen Form-Gruppe ist, wird diese angezeigt
+            toggleFormGroup(cardFields.id.substr(12));
+        }
+
+        $(id).focus();
+    }
+
+    function toggleAllFormGroups(expand) {
+        const toggleButtons = document.getElementsByClassName('cls-form--toggle_formgrup');
+        for(var i = 0; i < toggleButtons.length; i++) {
+            const btn = toggleButtons[i];
+            const grpId = btn.dataset.formgroup;
+            const visible = btn.dataset.formgroupVisible;
+
+            if((visible == "1" && !expand) || (visible == "0" && expand)) {
+                toggleFormGroup(grpId);
+            }
+        }
+    }
+
+    function toggleFormGroup(id) {
+        let cardFields = $('card_fields_' + id);
+        let visibility = null;
+        let buttonClass = null;
+        if (cardFields.style.display === "none") {
+            cardFields.show();
+            visibility = 1;
+            buttonClass = "fa-chevron-up";
+        } else {
+            cardFields.hide();
+            visibility = 0;
+            buttonClass = "fa-chevron-down";
+        }
+
+        if(!positionStickySupport) {
+            emulateSticky('buttons-container', 'bottom');
+        }
+
+        xajax_formgroup_visiblity('22500', 'standardformular', id, visibility);
+
+        const btn = document.getElementById('toggle_form_' + id);
+        btn.innerHTML = "<i class='fas " + buttonClass + " fa-xs'></i>";
+        btn.dataset.formgroupVisible = "" + visibility;
+
+    }
+
+    function enableFormButtons(formname) {
+        // Für jeden möglichen erfassen-Knopf wird geschaut ob es einen gibt und zum klicken freigegeben
+        ['submit', 'specialaction', 'specialaction2', 'submitandnext', 'submitandworkflow'].forEach(function(btnId) {
+            const btn = $(formname + '_' + btnId);
+            if(btn) btn.disabled = false;
+        })
+    }
+
+    function setAllMdlCheckBoxes(className, checked) {
+        let elements = document.getElementsByClassName(className);
+        for (let i = 0; i < elements.length; i++) {
+            if (elements[i].offsetParent !== null) {
+                setCheckbox(elements[i], checked);
+            }
+        }
+    }
+
+    function update_adressstamm_verbindungen(fieldId, newList) {
+        newList = JSON.parse(newList);
+
+        let button = $(fieldId + '_adr_cc_badge');
+        let tooltip = $(fieldId + '_adr_tooltip');
+
+        button.setAttribute('data-badge', newList.length);
+
+        if(newList.length === 0) {
+            button.removeClassName('mdl-badge');
+            button.removeClassName('mdl-badge--overlap');
+            button.disabled = true;
+
+            tooltip.innerHTML = 'Dieser Eintrag wird im Adressstamm geführt, ist aber mit keinen anderen Adressen verbunden';
+
+            $(fieldId + '_verteilungs_div').hide();
+
+        } else {
+            button.addClassName('mdl-badge');
+            button.addClassName('mdl-badge--overlap');
+            button.disabled = false;
+
+            tooltip.innerHTML = 'Dieser Eintrag wird im Adressstamm geführt und ist mit anderen Adressen verbunden, klicken Sie um Details zu sehen';
+
+            let innerHTML = 'Dieser Eintrag wird im Adressstamm geführt und ist mit anderen Adressen verbunden:';
+            innerHTML += '<ul>';
+            for(let i = 0; i < newList.length; i++) {
+                innerHTML += '<li>' + newList[i] + '</li>';
+            }
+            innerHTML += '</ul>';
+
+            $(fieldId + '_verteilungs_div_card_content').innerHTML = innerHTML;
+        }
+    }
+
+    // Anzeigen der FileUpload Felder
+    function show_next_uploadfield(row){
+        row++;
+        rowname = 'row_'+row;
+
+        try{
+            Effect.toggle($(rowname));
+        } catch(error){
+            //alert('Maximale Dokumentenzahl überschritten');
+        }
+    }
+
+    // Hochladen eines zu Croppenden Bilds abfangen
+    function readFile(input, cropHandler, f) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                cropHandler.bind({
+                    url: e.target.result
+                });
+                $('cropped_'+f).style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function removePicture(f) {
+        $('cropped_'+f).style.display = 'none';
+        $('b64_'+f).value = 'delete';
+    }
+
+    function cityLookup(plzfield) {
+        var plz = plzfield.value;
+        var id = plzfield.id;	// f6
+        var id2 = id.substring(1);
+        id2 = parseInt(id2) + 1;
+        var cityfield = "f"+id2;
+        if (plz.length==4) {
+            return xajax_city_lookup(plz, cityfield);
+        }
+        return;
+    }
+
+
+    function quernavStart() {
+        
+                    if(formChanged)
+                quernavSaveDialog();
+            else
+                quernavSubmit(false);
+                
+    }
+
+    function quernavSubmit(save) {
+        const newAction = save ? 'updateAndForm&init_quernav=1' : 'form&init_quernav=1';
+
+        const form = document.getElementById('standardformular');
+        form.action = form.action.replace('action=update', 'action=' + newAction);
+        form.submit();
+    }
+
+    function toggleFieldHistory() {
+        const menu = document.getElementById('btnToggleFieldHistory');
+        const clsForm = document.getElementById('cls-form');
+
+        if(clsForm.classList.contains('show-history-icons')) {
+            clsForm.classList.remove('show-history-icons');
+            menu.innerText = 'Änderungshistorie der Felder anzeigen';
+            xajax_frm_toggle_field_history(0);
+        } else {
+            clsForm.classList.add('show-history-icons');
+            menu.innerText = 'Änderungshistorie der Felder verbergen';
+            xajax_frm_toggle_field_history(1);
+        }
+    }
+
+    
+    document.observe("dom:loaded",function() {
+        var maincontent = document.getElementsByClassName('maincontent');
+        // Kalender-Felder initialisieren
+                                                                                                                                                                                                                                                                                                                                                                                                        
+        //hole alle felder mit classname ahv_number
+        var elements = document.getElementsByClassName("ahv_number");
+        for(var i = 0; i < elements.length; i++){
+            //ersetzte 13-stellige nummer durch zeichenkette mit Punkten
+            elements[i].value = stringToAhv(elements[i].value);
+        }
+
+        // MiniCal bei den Daten für Terminmutationen erzeugen
+        mdlMiniCal('timeeditdate_trigger', 'timeeditdate', {aboveInput: true});
+        mdlMiniCal('timeeditdatedeletion_trigger', 'timeeditdatedeletion', {aboveInput: true});
+
+        showSmartyErrors();
+
+        if($('f0')) {
+            focusField('f0');
+        }
+
+        if(!positionStickySupport) {
+            emulateSticky('buttons-container', 'bottom');
+        }
+    }, false);
+
+        
+
+    const jt_input = "\n" +
+        "<div class='mdl-textfield mdl-textfield--dense mdl-js-textfield mdl-textfield--floating-label mdl--json-table-input jsontbl_input_jt-id_coljt-col'>\n" +
+        "    <input class='mdl-textfield__input' type='text' id='input-id' jt-disabled\n" +
+        "           value='input-value' onchange='jsonTable_setJSON(\"jt-id\")'>\n" +
+        "    <label class='mdl-textfield__label' for='input-id'></label>\n" +
+        "</div>";
+
+    const jt_dropdown = "\n" +
+        "<div class='mdl-textfield mdl-textfield--dense mdl-js-textfield mdl-textfield--floating-label mdl--json-table-input jsontbl_input_jt-id_coljt-col'>\n" +
+        "    <select class='mdl-textfield__input' id='input-id' jt-disabled onchange='jsonTable_setJSON(\"jt-id\")'>\n" +
+        "    jt-options\n" +
+        "    </select>\n" +
+        "    <label class='mdl-textfield__label' for='input-id'></label>\n" +
+        "</div>";
+
+    const jt_move_up = "\n" +
+        "<button type='button' class='mdl-button mdl-js-button mdl-button--icon mdl-button--colored' onclick='jsonTable_moveRow(\"jt-id\", row-id, jt-nb, -1)'>\n" +
+        "    <i class='far fa-arrow-up fa-xs'></i>\n" +
+        "</button>";
+
+    const jt_move_down = "\n" +
+        "<button type='button' class='mdl-button mdl-js-button mdl-button--icon mdl-button--colored' onclick='jsonTable_moveRow(\"jt-id\", row-id, jt-nb, 1)'>\n" +
+        "    <i class='far fa-arrow-down fa-xs'></i>\n" +
+        "</button>";
+
+    const jt_delete = "\n" +
+        "<button type='button' class='mdl-button mdl-js-button mdl-button--icon mdl-button--red' onclick='jsonTable_deleteRow(\"jt-id\", row-id, jt-nb)'>\n" +
+        "    <i class='far fa-trash-alt fa-xs'></i>\n" +
+        "</button>";
+
+    function jsonTable_setTableHTML(id, nb, dis) {
+        const table = $(id+'_table');
+        const rows = table.rows;
+        const json = $(id+'_json').value;
+
+        let is_json = true;
+
+        try {
+            JSON.parse(json);
+        } catch (e) {
+            is_json = false;
+        }
+
+        // falls JSON-Array leer ist
+        if(json === '[]' || !is_json) {
+            // nur eine Zeile einfügen
+            let row = table.insertRow(1);
+            row.id = id+"_row_1";
+            for(let i = 0; i < nb; i++) {
+                let cell = row.insertCell(i);
+                jsonTable_setCellHTML(cell, id, 1, i, '', dis);
+            }
+
+            let d_cell = row.insertCell(nb);
+            if(dis !== "DISABLED") {
+                d_cell.innerHTML = jsonTable_rowButtons(id, 1, nb);
+            }
+            // sonst mit Daten füllen
+        } else {
+            // keys aus dem header auslesen
+            let header = [];
+            for(let i = 0; i < rows[0].cells.length - 1; i++) {
+                header[i] = rows[0].cells[i].innerHTML;
+            }
+
+            // Javascript-Objekt aus JSON-Array
+            const a = JSON.parse(json);
+            for(let i = 0; i < a.length; i++) {
+                // neue Spalte pro Array-Eintrag
+                let row = table.insertRow(i+1);
+                row.id = id+"_row_"+(i+1);
+
+                for(let j = 0; j < nb; j++) {
+                    let cell = row.insertCell(j);
+                    let value = a[i][header[j]];
+                    if(value !== 'undefined' && value !== undefined && value != null) {
+                        value = String(value);
+                        value = value.replace(new RegExp('&#92;&quot;', 'g'),'"');
+                        value = value.replace(new RegExp("'", 'g'),"&#39;");
+                    } else {
+                        value = "";
+                    }
+
+                    jsonTable_setCellHTML(cell, id, (i+1), j, value, dis);
+                }
+
+                let d_cell = row.insertCell(nb);
+                if(dis !== "DISABLED") {
+                    d_cell.innerHTML = jsonTable_rowButtons(id, (i+1), nb);
+                }
+            }
+        }
+    }
+
+    function jsonTable_setCellHTML(cell, id, row, col, value, dis) {
+
+        cell.id = id+"_row_"+row+"_cell_"+col;
+        const header = JSONTable[id]['header'][col];
+
+        if(JSONTable[id]['dropdown'] && JSONTable[id]['dropdown'][header] == true) {
+            let options = "<option value=''>-</option>";
+            let optionFound = false;
+            for(let j = 0; j < JSONTable[id]['autocomplete'][header].length; j++) {
+                const v = JSONTable[id]['autocomplete'][header][j];
+                let selected;
+                if (v === value) {
+                    selected = 'selected';
+                    optionFound = true;
+                } else {
+                    selected = '';
+                }
+                options += "<option value='"+v+"' "+selected+">"+v+"</option>";
+            }
+
+            if(!optionFound && value.length > 0) {
+                // Falls der aktuell gesetzte Wert nicht in den Optionen erscheint, muss dieser ergänzt werden, damit keine Daten verloren gehen
+                options += "<option value='"+value+"' selected>"+value+" (*)</option>";
+            }
+
+            cell.innerHTML = jt_dropdown.replace(new RegExp('input-id', 'g'), id+"_row_"+row+"_input_"+col)
+                .replace(new RegExp('input-value', 'g'), '')
+                .replace(new RegExp('jt-id', 'g'), id)
+                .replace(new RegExp('jt-col', 'g'), col)
+                .replace(new RegExp('jt-disabled', 'g'), dis)
+                .replace(new RegExp('jt-options', 'g'), options);
+        } else {
+            cell.innerHTML =  jt_input.replace(new RegExp('input-id', 'g'), id+"_row_"+row+"_input_"+col)
+                .replace(new RegExp('input-value', 'g'), value)
+                .replace(new RegExp('jt-id', 'g'), id)
+                .replace(new RegExp('jt-col', 'g'), col)
+                .replace(new RegExp('jt-disabled', 'g'), dis);
+
+                    }
+    }
+
+    function jsonTable_addRow(id, nb) {
+        const table = $(id+'_table');
+
+        const nb_rows = table.rows.length;
+        let row = table.insertRow(nb_rows-1);
+        row.id = id+"_row_"+(nb_rows-1);
+
+        for(let i = 0; i < nb; i++) {
+            let cell = row.insertCell(i);
+            jsonTable_setCellHTML(cell, id, (nb_rows - 1), i, '', '');
+        }
+
+        
+                
+
+        let d_cell = row.insertCell(nb);
+
+        d_cell.innerHTML = jsonTable_rowButtons(id, nb_rows - 1, nb);
+
+        // MDL-Inputs upgraden
+        componentHandler.upgradeDom();
+
+        $(id+"_row_"+(nb_rows-1)+"_input_0").focus();
+    }
+
+    function jsonTable_setTableHTML_print(id, nb, dis) {
+        var table = $(id+'_table');
+        var rows = table.rows;
+        var json = $(id+'_json').value;
+
+        var is_json = true;
+
+        try {
+            JSON.parse(json);
+        } catch (e) {
+            is_json = false;
+        }
+
+        // falls JSON-Array leer ist
+        if(json == '[]' || !is_json) {
+            // nur eine Zeile einfügen
+            var row = table.insertRow(1);
+            for(var i = 0; i < nb; i++) {
+                var cell = row.insertCell(i);
+                cell.innerHTML = "kein(e)";
+            }
+
+            var d_cell = row.insertCell(nb);
+            // sonst mit Daten füllen
+        } else {
+            // keys aus dem header auslesen
+            var header = new Array();
+            for(var i = 0; i < rows[0].cells.length - 1; i++)
+                header[i] = rows[0].cells[i].innerHTML;
+
+            // Javascript-Objekt aus JSON-Array
+            var a = JSON.parse(json);
+            for(var i = 0; i < a.length; i++) {
+                // neue Spalte pro Array-Eintrag
+                var row = table.insertRow(i+1);
+
+                for(var j = 0; j < nb; j++) {
+                    var cell = row.insertCell(j);
+                    var value = a[i][header[j]];
+                    if(value != undefined) {
+                        value = value.replace(new RegExp('&#92;&quot;', 'g'),'"');
+                    } else {
+                        value = "";
+                    }
+                    cell.innerHTML = value;
+                }
+
+                var d_cell = row.insertCell(nb);
+            }
+        }
+    }
+
+    function jsonTable_clearJSON(id, nb) {
+        var nb_rows = $(id+'_table').rows.length;
+
+        // -2 weil letzte zeile ("hinzufügen") nicht entfernt werden soll
+        // > 0 weil erste zeile (header) nicht entfernt werden soll
+        for(var i = nb_rows - 2; i > 0; i--)
+            $(id+'_row_'+i).remove();
+    }
+
+    function jsonTable_setJSON(id) {
+
+        var table = $(id+'_table');
+        var rows = table.rows;
+        var header = new Array();
+        var j_array = new Array();
+
+        for(var i = 0; i < rows[0].cells.length - 1; i++) {
+            header[i] = rows[0].cells[i].innerHTML;
+        }
+
+        for(var i = 1; i < rows.length - 1; i++) {
+            var row = rows[i].id;
+            var row_values = {};
+            var ok = false;
+            for(var j = 0; j < header.length; j++) {
+                var key = header[j];
+                /*
+                Change Lucius 3.3.2016,
+                damit in die Datenbank das ersetzte doppelte " kommt, muss es hier beim preparen ersetzt werden.
+                */
+                var value = $(row+'_input_'+j).value.replace(new RegExp('"','g'), '&#92;&quot;');
+                if(value != '')
+                    ok = true;
+                row_values[key] = value;
+            }
+            if(ok)
+                j_array.push(row_values);
+        }
+
+        $(id+'_json').value = JSON.stringify(j_array);
+        return false;
+    }
+
+    function jsonTable_rowButtons(tableId, rowId, nbCols) {
+        var buttons = "";
+        buttons += jt_delete.replace(new RegExp('jt-id', 'g'), tableId)
+            .replace(new RegExp('row-id', 'g'), rowId)
+            .replace(new RegExp('jt-nb', 'g'), nbCols);
+
+        buttons += jt_move_up.replace(new RegExp('jt-id', 'g'), tableId)
+            .replace(new RegExp('row-id', 'g'), rowId)
+            .replace(new RegExp('jt-nb', 'g'), nbCols);
+
+        buttons += jt_move_down.replace(new RegExp('jt-id', 'g'), tableId)
+            .replace(new RegExp('row-id', 'g'), rowId)
+            .replace(new RegExp('jt-nb', 'g'), nbCols);
+
+        return buttons;
+    }
+
+    function jsonTable_showTable(icol) {
+        $(icol + '_div_txt').hide();
+        $(icol + '_div_tab').show();
+    }
+
+    function jsonTable_showJson(icol) {
+        jsonTable_setJSON(icol);
+
+        try {
+            const json = $(icol + '_json').value;
+            const tmpObj = JSON.parse(json);
+            const tmpJSON = JSON.stringify(tmpObj, null, 4);
+            $(icol + '_json').value = tmpJSON;
+        } catch (e) {
+            console.error("could not prettify JSON", e);
+        }
+
+        $(icol + '_div_txt').show();
+        $(icol + '_div_tab').hide();
+    }
+
+    function jsonTable_toggleHeader(jtId, col) {
+        const headerCell = document.getElementById('jt_header_'+jtId+'_col'+col);
+        const expanded = headerCell.dataset.expanded === 'yes';
+        const headerRow = document.getElementsByClassName(jtId + '_header');
+        const form = document.getElementById('cls-form');
+
+        for(var h = 0; h < headerRow.length; h++) {
+            headerRow[h].classList.remove('collapsed');
+            headerRow[h].classList.remove('expanded');
+            headerRow[h].dataset.expanded = 'no';
+        }
+
+
+        if(!expanded) {
+            for(var h2 = 0; h2 < headerRow.length; h2++) {
+                const header = headerRow[h2];
+                header.dataset.expanded = header.id === 'jt_header_'+jtId+'_col'+col ? 'yes' : 'no';
+                header.classList.add(header.id === 'jt_header_'+jtId+'_col'+col ? 'expanded' : 'collapsed');
+            }
+
+            if(!form.dataset.initMaxWidth) {
+                form.dataset.initMaxWidth = form.getBoundingClientRect().width;
+            }
+            form.style.maxWidth = '100%';
+        } else {
+            form.style.maxWidth = form.dataset.initMaxWidth + 'px';
+        }
+    }
+
+    function jsonTable_moveRow(tableId, rowId, nbCols, copyOffset) {
+        const table = document.getElementById(tableId + '_table');
+
+        if(rowId + copyOffset >= (table.rows.length - 1)) {
+            console.log('last row can not be moved down');
+            return;
+        }
+        if(rowId + copyOffset <= 0) {
+            console.log('first row can not be moved up');
+            return;
+        }
+
+        for(var i = 0; i < nbCols; i++) {
+            const input1 = document.getElementById(tableId + '_row_' + rowId + '_input_' + i);
+            const input2 = document.getElementById(tableId + '_row_' + (rowId + copyOffset) + '_input_' + i);
+            var tmp = input1.value;
+            input1.value = input2.value;
+            input2.value = tmp;
+        }
+
+        //nach dem umsortieren muss nochmals tabel_to_json aufgerufen werden.
+        jsonTable_setJSON(tableId);
+    }
+
+    function jsonTable_deleteRow(tableId, rowId, nbCols) {
+        var table = $(tableId+'_table');
+        if(table.rows.length === 3) {
+            // falls nur noch eine Zeile, Zeile nicht löschen, sondern nur Daten löschen
+            for(var i = 0; i < nbCols; i++)
+                $(tableId+'_row_'+rowId+'_input_'+i).value = '';
+        } else {
+            // sonst ganze Zeile löschen
+            $(tableId + '_row_' + rowId).remove();
+        }
+        //nach dem entfernen muss nochmals tabel_to_json aufgerufen werden.
+        jsonTable_setJSON(tableId);
+    }
+
+    function custom_alert(obj, json) {
+        var value = '';
+        if(obj.type == 'select-one') {
+            value = obj.options[obj.selectedIndex].text;
+        } else {
+            value = obj.value;
+        }
+
+        var def = '';
+        var text = '';
+
+        var a = json;
+        for(var i = 0; i < a.length; i++) {
+            if(a[i]['Wert'] == '') {
+                def = a[i]['Text'];
+            }
+            if(a[i]['Wert'] == value) {
+                text = a[i]['Text'];
+            }
+        }
+
+        if(text != '') {
+            alert(text);
+        } else if(def != '') {
+            alert(def);
+        }
+    }
+
+    function SetAllCheckBoxesFrm(FormName, FieldName, CheckValue) {
+        if(!document.forms[FormName]) {
+            return;
+        }
+        var objCheckBoxes = document.forms[FormName].elements[FieldName];
+        if(!objCheckBoxes) {
+            return;
+        }
+        var countCheckBoxes = objCheckBoxes.length;
+        if(!countCheckBoxes) {
+            setCheckbox(objCheckBoxes, CheckValue);
+        } else {
+            // set the check value for all check boxes
+            for (var i = 0; i < countCheckBoxes; i++) {
+                setCheckbox(objCheckBoxes[i], CheckValue);
+            }
+        }
+    }
+
+    function filterdropm_dbl(icol) {
+        // alls callback für das laden übergeben wir diese funktion, erklärung weiter unten
+        const loading = loadDropmDbl(icol, filterdropm_dbl, [icol]);
+
+        if(loading) {
+            // falls die dropm-Einträge erst noch geladen werden müssen, passiert dies asynchron. Desewgen wird hier filterdropm_dbl
+            // abgebrochen, da sonst der verschobene Eintrag durch das laden überschrieben wird. Da wir diese Funktion als Callback
+            // angegeben haben, wird die funktion nach dem Laden ausgeführt.
+            return;
+        }
+
+        if (browserIsIE || browserIsSafari) {
+            let debounceFnc = debounce(function() {
+                console.log('is IE, we have some additional work to do');
+                filterList('dropm_right_'+icol, $('filter_'+icol).value);
+
+                const hiddenContainer = document.getElementById('list_ie_filter_'+icol);
+                const visibleContainer = document.getElementById('list_'+icol);
+
+                // Optionen welche im sichtbaren select sind, aber nicht dem filter entsprechen werden in den versteckten select übertragen
+                const toHide = visibleContainer.querySelectorAll('.dropm_right_'+icol+'--filterlist-hide');
+                for(let i = 0; i < toHide.length; i++) {
+                    hiddenContainer.appendChild(toHide[i]);
+                }
+                // Optionen welche im versteckten select sind, und dem filter entsprechen werden in den sichtbaren select übertragen
+                const toShow = hiddenContainer.querySelectorAll('.dropm_right_'+icol+'--filterlist-show');
+
+                // absteigend abarbeiten
+                for(let i = toShow.length - 1; i >= 0; i--) {
+
+                    // beim übertragen ins sichtbare select müssen wir erst noch herausfinden an welcher position die
+                    // Option eingefügt werden soll. Dazu gehen wir davon aus dass die Optionen in der Reihenfolge der
+                    // Values im select stehen sollen. Wir gehen also von der value des aktuellen Select aus und
+                    // ermitteln die sichtbare Option mit nächst höchster value und fügen dort ein.
+                    let val = parseInt(toShow[i].value);
+
+                    let nextVisibleOption = null;
+                    let nextOption = document.querySelector('.dropm_right_f0[value="'+(++val)+'"]');
+                    while(nextOption) {
+                        if (nextOption.classList.contains('dropm_right_' + icol + '--filterlist-show')) {
+                            nextVisibleOption = nextOption;
+                            break;
+                        }
+                        nextOption = document.querySelector('.dropm_right_f0[value="'+(++val)+'"]');
+                    }
+
+                    if(nextVisibleOption) {
+                        visibleContainer.insertBefore(toShow[i], nextVisibleOption);
+                    } else {
+                        visibleContainer.appendChild(toShow[i]);
+                    }
+                }
+            }, 300);
+            // Debounce-Funktion ausführen
+            debounceFnc();
+        } else {
+            // Funktion zum Debouncen erzeugen
+            let debounce = filterListDebounce('dropm_right_'+icol, 'filter_'+icol, 300);
+            // Debounce-Funktion ausführen
+            debounce();
+        }
+    }
+
+    function loadDropmDbl(id, fct, args) {
+        const select = document.getElementById('list_' + id);
+        const list = document.getElementById('list_' + id + '_all').querySelectorAll("li");
+        const loader = document.getElementById('list_' + id + '_loading');
+
+        if(select.dataset.allOptionsLoaded || 'no' === 'yes') {
+            return false;
+        }
+
+        loader.style.display = 'block';
+
+        setTimeout(function() {
+            // Den Rest in einem Timeout ohen zeit machen damit das disablen des Filter und das Anzeigen des loaders zwischendurch passieren kann
+
+            const selectedOptions = [];
+
+            // ausgewählte Einträge ermitteln damit diese danach wieder als ausgewählt angezeigt werden können
+            if(select.selectedOptions) {
+                for (let i = 0; i < select.selectedOptions.length; i++) {
+                    selectedOptions.push(select.selectedOptions[i].value);
+                }
+            }
+
+            select.options.length = 0;
+
+            let html = '';
+
+            for(let i = 0; i < list.length; i++) {
+                const txt = list[i].innerText;
+                const selected = selectedOptions.indexOf(list[i].dataset['value']) > -1 ? 'selected' : '';
+                html += '<option class="' + list[i].dataset['class'] + '" value="' + list[i].dataset['value'] + '" title="' + txt + '" data-disable-on-hide="yes" data-filter-value="' + txt + '" ' + selected + '>' + txt + '</option>';
+            }
+            select.innerHTML = html;
+            select.dataset.allOptionsLoaded = 'yes';
+            select.onscroll = null;
+
+            loader.style.display = 'none';
+
+            if(fct) {
+                fct.apply(null, args);
+            }
+        }, 0);
+
+        return true;
+    }
+
+    function check_dropm(form, field, iter, checked, currentfilter) {
+        if(!document.forms[form]){
+            return;
+        }
+        var objCheckBoxes = document.forms[form].elements[field];
+
+        if(!objCheckBoxes){
+            return;
+        }
+
+        //wenn length property gesetzt, ist es etwas array ähnliches, somit auf bestimmtes element zugreifen
+        if(objCheckBoxes.length){
+            objCheckBoxes[(iter - 1)].checked = checked;
+            //sonst kommt ein einzelnes element zurück
+        }else{
+            objCheckBoxes.checked = checked;
+        }
+    }
+
+    function filterdropm_notdbl(form, icol, filter, currentFilter) {
+        if(!document.forms[form])
+            return;
+
+        if(currentFilter == undefined){
+            if(window.lastFilterDropmstdForm == undefined)
+                window.lastFilterDropmstdForm = [];
+
+            if(window.lastFilterDropmstdForm[icol] == undefined){
+                window.lastFilterDropmstdForm[icol] = 0;
+            }else{
+                window.lastFilterDropmstdForm[icol]++;
+            }
+            var myFilter = window.lastFilterDropmstdForm[icol]*1;
+
+            window.setTimeout(function(e){filterdropm_notdbl(form, icol, filter, myFilter);}, 300);
+
+            return;
+        }
+
+        if(window.lastFilterDropmstdForm[icol] != currentFilter){
+            return;
+        }else{
+            window.lastFilterDropmstdForm[icol] = undefined;
+        }
+
+
+        // hole die noetigen DOM Elemente
+        var objCheckBoxes = document.forms[form].elements[icol + '[]'];
+        var table = $('dropmtable_'+icol);
+        var nb_rows = table.rows.length;
+
+        // loesche alle checkboxes aus angezeigter tabelle
+        for(var i = nb_rows - 2; i > 0; i--)
+            table.deleteRow(i);
+
+        // variable um zu tracken wie viele zeilen eingefuegt
+        var cc = 1;
+        // iteriere ueber versteckte checkboxes
+        for(var i = 0; i < objCheckBoxes.length; i++) {
+            // schaue ob filter passt oder ob die Checkbox angehäckelt ist
+            var txt = $(objCheckBoxes[i].id + '_value').innerHTML;
+            if (txt.toLowerCase().indexOf(filter.toLowerCase()) != -1 || objCheckBoxes[i].checked) {
+                // wenn ja, fuege neue Zeile ein
+                var row = table.insertRow(cc);
+                var cell = row.insertCell(0);
+                // checkbox code
+                var cell_txt = "<input class=\"noborder\" type='checkbox' name='"+icol+"_f[]'";
+                if(objCheckBoxes[i].checked)
+                    cell_txt += "checked ";
+                cell_txt += "onChange=\"check_dropm('"+form+"', '"+icol+"[]', "+(i+1)+", this.checked);\">";
+                // und label code
+                cell.innerHTML = cell_txt + txt;
+                cc++;
+            }
+        }
+    }
+
+    /* begin javascript for HTML_QuickForm_advmultselect */
+    function moveSelections(menuLeft, menuRight, menuHidden, action, icol) {
+
+        // alls callback für das laden übergeben wir diese funktion, erklärung weiter unten
+        const loading = loadDropmDbl('f' + icol, moveSelections, [menuLeft, menuRight, menuHidden, action, icol]);
+
+        if(loading) {
+            // falls die dropm-Einträge erst noch geladen werden müssen, passiert dies asynchron. Desewgen wird hier moveSelections
+            // abgebrochen, da sonst der verschobene Eintrag durch das laden überschrieben wird. Da wir diese Funktion als Callback
+            // angegeben haben, wird die funktion nach dem Laden ausgeführt.
+            return;
+        }
+
+        if ( typeof moveSelections.timeeditinfoadd == 'undefined' ) {
+            moveSelections.timeeditinfoadd = {};
+        }
+        if (typeof moveSelections.timeeditinfoadd[icol] == 'undefined'){
+            moveSelections.timeeditinfoadd[icol] = new Array();
+        }
+
+        if ( typeof moveSelections.timeeditinforem == 'undefined' ) {
+            moveSelections.timeeditinforem = {};
+        }
+        if (typeof moveSelections.timeeditinforem[icol] == 'undefined'){
+            moveSelections.timeeditinforem[icol] = new Array();
+        }
+
+        if(action == 'add') {
+            menuFrom = menuLeft;
+            menuTo = menuRight;
+        }	else {
+            menuFrom = menuRight;
+            menuTo = menuLeft;
+        }
+        // Don't do anything if nothing selected. Otherwise we throw jscript errors.
+        if(menuFrom.selectedIndex == -1) {
+            return;
+        }
+        // Add items to the 'TO' list.
+        for ( i=0; i < menuFrom.length; i++) {
+            if (menuFrom.options[i].selected == true ) {
+                const newOption = new Option(menuFrom.options[i].text, menuFrom.options[i].value);
+                if(action !== 'add') {
+                    // falls die Option ins linke menü eingefügt wird, müssen noch filter-angaben ergänzt werden
+                    newOption.addClassName('dropm_right_f' + icol);
+                    newOption.dataset.filterValue = menuFrom.options[i].text;
+                }
+                menuTo.options[menuTo.length] = newOption;
+                if (action == 'add'){
+                    // Falls in Remove-Array drin, muss er nicht ins Add übernommen werden, sondern aus Remove gelöscht werden
+                    if (moveSelections.timeeditinforem[icol].indexOf(menuFrom.options[i].text) == -1){
+                        moveSelections.timeeditinfoadd[icol].push(menuFrom.options[i].text);
+                    } else {
+                        moveSelections.timeeditinforem[icol].splice(moveSelections.timeeditinforem[icol].indexOf(menuFrom.options[i].text),1);
+                    }
+                } else{
+                    // Falls in Add-Array drin, muss er nicht ins Remove übernommen werden, sondern aus Add gelöscht werden
+                    if (moveSelections.timeeditinfoadd[icol].indexOf(menuFrom.options[i].text) == -1){
+                        moveSelections.timeeditinforem[icol].push(menuFrom.options[i].text);
+                    } else {
+                        moveSelections.timeeditinfoadd[icol].splice(moveSelections.timeeditinfoadd[icol].indexOf(menuFrom.options[i].text),1);
+                    }
+                }
+            }
+        }
+        // Remove items from the 'FROM' list.
+        for (i = (menuFrom.length - 1); i>=0; i--) {
+            if (menuFrom.options[i].selected == true ) {
+                menuFrom.options[i] = null;
+            }
+        }
+        // Unselect all options in the hidden select
+        menuHidden.options.length = 0;
+        // Set the appropriate items as 'selected in the hidden select.
+        // These are the values that will actually be posted with the form.
+        for ( i=0; i < menuRight.length; i++) {
+            menuHidden.options[menuHidden.length] = new Option(menuRight.options[i].text, menuRight.options[i].value);
+            menuHidden.options[menuHidden.length-1].selected = true;
+        }
+        $('anzahl_f'+icol).innerHTML = menuRight.options.length;
+
+        var eventName = 'dropmchanged';
+        if (document.createEvent)  {
+            var evt = document.createEvent('HTMLEvents');
+            evt.initEvent(eventName, true, true);
+
+            menuRight.dispatchEvent(evt);
+        }
+
+        if (menuRight.fireEvent)
+            menuRight.fireEvent('on' + eventName);
+
+        // Auflistung der bei diesem Formularaufruf eingefügten Objekte hinter einem "+"
+        /*
+        var addinfo = moveSelections.timeeditinfoadd[icol].join();
+        if($('timeeditinfoaddrem_'+icol)) {
+            $('timeeditinfoaddrem_' + icol).innerHTML = addinfo;
+        }
+        if (addinfo.length > 0) addinfo = 'einfügen: '+ addinfo + '<br>';
+        if($('timeeditinfoadd_'+icol)) {
+            $('timeeditinfoadd_'+icol).innerHTML = addinfo;
+        }
+
+        // Auflistung der bei diesem Formularaufruf gelöschten Objekte hinter einem "-"
+        var reminfo = moveSelections.timeeditinforem[icol].join();
+        if (reminfo.length > 0) reminfo = 'löschen: ' + reminfo;
+        if($('timeeditinforem_'+icol)) {
+            $('timeeditinforem_' + icol).innerHTML = reminfo;
+        }
+
+        if (reminfo.length == 0 && addinfo.length == 0) {
+            $('timeediticon_' + icol).hide();
+            $('timeeditdiv_' + icol).hide();
+        } else {
+            $('timeediticon_' + icol).show();
+            //$('timeeditblockaddremtitle_' + icol).hide();
+        }
+
+
+        if (addinfo.length == 0) {
+            $('timeeditblockaddrem_' + icol).style.visibility = 'hidden';
+        } else {
+            $('timeeditblockaddrem_' + icol).style.visibility = 'visible';
+        }
+        */
+
+    }
+
+    // Arrays für ff-Nummern zu Feldnamen
+    var label2numbers = new Array();
+    var lbl2fld = new Array();
+
+    /**
+     * Funktionen für Eingabe-Hilfen
+     **/
+
+    // Erlaubt flexible Eingabe von Datums-Strings
+    function flexDate(elem) {
+        var dateString = elem.value.split(".");
+        if(dateString[2] == null || dateString[2]=="") {
+            dateString[2] = new Date().getFullYear();
+        }
+        if(parseInt(dateString[2])<100) {
+            dateString[2] = "20"+dateString[2];
+        }
+        var timestamp = Date.parse(dateString[2]+"/"+dateString[1]+"/"+dateString[0]);
+        if(isNaN(timestamp)) {
+            return false;
+        }
+        var day = dateString[0];
+        if(day.length ==1) {
+            day = '0'+day;
+        }
+
+        var month = dateString[1];
+        if(month.length ==1) {
+            month = '0'+month;
+        }
+
+        elem.value = day+"."+month+"."+dateString[2];
+    }
+
+    //Konvertiert 13 zeichen strings in ahv nummern nach format xxx.xxxx.xxxx.xx
+    function stringToAhv(string) {
+        if(string.length != 13) {
+            return string;
+        } else {
+            var numberBlocks = [];
+            numberBlocks[0] = string.substr(0, 3);
+            numberBlocks[1] = string.substr(3, 4);
+            numberBlocks[2] = string.substr(7, 4);
+            numberBlocks[3] = string.substr(11, 2);
+
+            return numberBlocks[0]+"."+numberBlocks[1]+"."+numberBlocks[2]+"."+numberBlocks[3];
+        }
+
+    }
+
+    function checkAHV(ahv) {
+        if(ahv.length != 13) {
+            return false;
+        }
+
+        var sum = 0;
+
+        for(var i = 0; i < 12; i ++) {
+
+            var j = parseInt(ahv.charAt(i));
+            if(isNaN(j)) {
+                return false;
+            }
+
+            if ((i+1) % 2 == 0) {
+                sum += (j*3);
+            } else {
+                sum += j;
+            }
+        }
+
+        var sumr = 10 * Math.ceil(sum / 10);
+        var kontrollziffer = sumr - sum;
+        if (parseInt(ahv.charAt(12)) == kontrollziffer) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    let adressstammLinksLoaded = {};
+    let adressstammLinksLoading = {};
+
+    function update_adressstamm_link(fieldId) {
+
+        if((fieldId in adressstammLinksLoading) && adressstammLinksLoading[fieldId] === true) {
+            // Falls die Adressen gerade geladen werden, nichts tun
+            return;
+        }
+
+        const select = $(fieldId);
+
+        if(!(fieldId in adressstammLinksLoaded) && (select.selectedIndex + 1) === select.options.length) {
+            // Falls der dritte Eintrag gewählt wurde, und die Adressen noch nicht geladen wurden, dann werden diese jetzt geladen
+            adressstammLinksLoading[fieldId] = true;
+            select.options.length = 0;
+            select.options.add(new Option('Adressen werden geladen...', '0'));
+            xajax_load_adressstamm_links(fieldId);
+        } else {
+            // Sonst wurde eine Adresse ausgewählt, die Feld-Inhalt müssen dementsprechend geleert werden
+            xajax_adressstamm_link_changed(fieldId, select.selectedIndex);
+        }
+    }
+
+    function setFieldValue(fieldId, value) {
+        $(fieldId).value = value;
+    }
+
+    
+
+        function check_critical_signs() {
+
+                        
+        
+        if ($('f0')) {
+            if ($('f0').value.search('"') != -1 && (2) < 2) {
+                alert('Das Zeichen \" ist nicht erlaubt. Feld: E-Mail');
+                return false;
+            }
+            if ($('f0').value.search('\\\\') != -1 && (2) < 4) {
+                alert('Das Zeichen \\\\ ist nicht erlaubt. Feld: E-Mail');
+                return false;
+            }
+            if ($('f0').value.search('<[^ \t\r\n\f]') != -1) {
+                alert('Auf das Zeichen < muss ein Leerschlag folgen. Feld: E-Mail');
+                return false;
+            }
+        }
+        
+        
+                        
+        
+        if ($('f1')) {
+            if ($('f1').value.search('"') != -1 && (2) < 2) {
+                alert('Das Zeichen \" ist nicht erlaubt. Feld: Private E-Mail-Adresse');
+                return false;
+            }
+            if ($('f1').value.search('\\\\') != -1 && (2) < 4) {
+                alert('Das Zeichen \\\\ ist nicht erlaubt. Feld: Private E-Mail-Adresse');
+                return false;
+            }
+            if ($('f1').value.search('<[^ \t\r\n\f]') != -1) {
+                alert('Auf das Zeichen < muss ein Leerschlag folgen. Feld: Private E-Mail-Adresse');
+                return false;
+            }
+        }
+        
+        
+                        
+        
+        if ($('f2')) {
+            if ($('f2').value.search('"') != -1 && (2) < 2) {
+                alert('Das Zeichen \" ist nicht erlaubt. Feld: Handy Nummer');
+                return false;
+            }
+            if ($('f2').value.search('\\\\') != -1 && (2) < 4) {
+                alert('Das Zeichen \\\\ ist nicht erlaubt. Feld: Handy Nummer');
+                return false;
+            }
+            if ($('f2').value.search('<[^ \t\r\n\f]') != -1) {
+                alert('Auf das Zeichen < muss ein Leerschlag folgen. Feld: Handy Nummer');
+                return false;
+            }
+        }
+        
+        
+                        
+        
+        if ($('f3')) {
+            if ($('f3').value.search('"') != -1 && (2) < 2) {
+                alert('Das Zeichen \" ist nicht erlaubt. Feld: PIN für schulNetz.mobile');
+                return false;
+            }
+            if ($('f3').value.search('\\\\') != -1 && (2) < 4) {
+                alert('Das Zeichen \\\\ ist nicht erlaubt. Feld: PIN für schulNetz.mobile');
+                return false;
+            }
+            if ($('f3').value.search('<[^ \t\r\n\f]') != -1) {
+                alert('Auf das Zeichen < muss ein Leerschlag folgen. Feld: PIN für schulNetz.mobile');
+                return false;
+            }
+        }
+        
+        
+                        
+        
+        if ($('f4')) {
+            if ($('f4').value.search('"') != -1 && (2) < 2) {
+                alert('Das Zeichen \" ist nicht erlaubt. Feld: Tabellenzeilen pro Seite');
+                return false;
+            }
+            if ($('f4').value.search('\\\\') != -1 && (2) < 4) {
+                alert('Das Zeichen \\\\ ist nicht erlaubt. Feld: Tabellenzeilen pro Seite');
+                return false;
+            }
+            if ($('f4').value.search('<[^ \t\r\n\f]') != -1) {
+                alert('Auf das Zeichen < muss ein Leerschlag folgen. Feld: Tabellenzeilen pro Seite');
+                return false;
+            }
+        }
+        
+        
+                        
+        
+        
+                        
+        
+        
+                        
+        
+        if ($('f7')) {
+            if ($('f7').value.search('"') != -1 && (2) < 2) {
+                alert('Das Zeichen \" ist nicht erlaubt. Feld: Foto');
+                return false;
+            }
+            if ($('f7').value.search('\\\\') != -1 && (2) < 4) {
+                alert('Das Zeichen \\\\ ist nicht erlaubt. Feld: Foto');
+                return false;
+            }
+            if ($('f7').value.search('<[^ \t\r\n\f]') != -1) {
+                alert('Auf das Zeichen < muss ein Leerschlag folgen. Feld: Foto');
+                return false;
+            }
+        }
+        
+        
+                        
+        
+        
+                        
+        
+        if ($('f9')) {
+            if ($('f9').value.search('"') != -1 && (2) < 2) {
+                alert('Das Zeichen \" ist nicht erlaubt. Feld: Inkl. Stundenplan');
+                return false;
+            }
+            if ($('f9').value.search('\\\\') != -1 && (2) < 4) {
+                alert('Das Zeichen \\\\ ist nicht erlaubt. Feld: Inkl. Stundenplan');
+                return false;
+            }
+            if ($('f9').value.search('<[^ \t\r\n\f]') != -1) {
+                alert('Auf das Zeichen < muss ein Leerschlag folgen. Feld: Inkl. Stundenplan');
+                return false;
+            }
+        }
+        
+        
+                        
+        
+        if ($('f10')) {
+            if ($('f10').value.search('"') != -1 && (2) < 2) {
+                alert('Das Zeichen \" ist nicht erlaubt. Feld: Inkl. Termine');
+                return false;
+            }
+            if ($('f10').value.search('\\\\') != -1 && (2) < 4) {
+                alert('Das Zeichen \\\\ ist nicht erlaubt. Feld: Inkl. Termine');
+                return false;
+            }
+            if ($('f10').value.search('<[^ \t\r\n\f]') != -1) {
+                alert('Auf das Zeichen < muss ein Leerschlag folgen. Feld: Inkl. Termine');
+                return false;
+            }
+        }
+        
+        
+                        
+        
+        if ($('f11')) {
+            if ($('f11').value.search('"') != -1 && (2) < 2) {
+                alert('Das Zeichen \" ist nicht erlaubt. Feld: Inkl. Prüfungen');
+                return false;
+            }
+            if ($('f11').value.search('\\\\') != -1 && (2) < 4) {
+                alert('Das Zeichen \\\\ ist nicht erlaubt. Feld: Inkl. Prüfungen');
+                return false;
+            }
+            if ($('f11').value.search('<[^ \t\r\n\f]') != -1) {
+                alert('Auf das Zeichen < muss ein Leerschlag folgen. Feld: Inkl. Prüfungen');
+                return false;
+            }
+        }
+        
+        
+                return true;
+    }
+
+        function cancel() {
+        location.href="index.php?pageid=22500&id=f0c039a84fc469e6&transid=d5cf03";
+    }
+
+    function deleteAttachment(id) {
+        $(id +'_filename').value = '';
+        $(id).value = '';
+
+        if(browserIsSafari){
+            $(id).type = ''
+            $(id).type = 'file'
+        }
+
+        $('delete_attachment_' + id).style.display = 'none';
+    }
+
+    let JSONTable = [];
+
+    
+    let dropmLeaveAsIsSelected = {};
+
+    function checkDropmBulk(icol, leaveAsIsIdx) {
+        setTimeout(function() {
+            const menuRight = $('list_right_f' + icol);
+
+            var leaveAsIsSelected = false;
+
+            // Prüfen ob der Leave-As-Is Eintrag in der rechten Liste vorhanden ist
+            for(let i = 0; i < menuRight.options.length; i++) {
+                if(menuRight.options[i].value == leaveAsIsIdx) {
+                    leaveAsIsSelected = true;
+                    break;
+                }
+            }
+
+            if(dropmLeaveAsIsSelected[icol] !== true && leaveAsIsSelected) {
+                // Falls der Leave-As-Is Eintrag nicht selektiert war, und nun hinzugefügt wurde, werden alle anderen Wahlen wieder nach links geschoben
+                moveSelectionsBulk(icol, leaveAsIsIdx, false);
+            } else {
+                // Sonst wurde ein normaler Eintrag nach rechts verschoben, in dem Fall wird der Leave-as-is Eintrag nach links verschoben
+                moveSelectionsBulk(icol, leaveAsIsIdx, true);
+            }
+        }, 0);
+
+    }
+
+    function moveSelectionsBulk(icol, leaveAsIsIdx, removeLeaveAsIs) {
+        const menuLeft = $('list_f' + icol);
+        const menuRight = $('list_right_f' + icol);
+        const menuHidden = $('list_hidden_f' + icol);
+
+        for(let i = 0; i < menuRight.options.length; i++) {
+            if(menuRight.options[i].value == leaveAsIsIdx) {
+                // Falls es sich um den Leave-As-Is Eintrag handelt, wird dieser nach links verschoben falls angegeben wurde dass dieser Eintrag entfernt werden soll
+                menuRight.options[i].selected = removeLeaveAsIs;
+            } else {
+                // Sonst werden die ausgewählten Einträge nach links verschoben falls angegeben wurde dass der Leave-As-Is Eintrag stehen bleiben soll
+                menuRight.options[i].selected = !removeLeaveAsIs;
+            }
+        }
+        // Ausgewählte Einträge nach links verschieben
+        moveSelections(menuLeft, menuRight, menuHidden, 'remove', icol);
+
+        dropmLeaveAsIsSelected[icol] = !removeLeaveAsIs;
+    }
+
+    
+
+</script>
+<dialog class="mdl-dialog" id="quernav_save_dialog" style="max-width: 800px; width: auto;">
+    <b class="mdl-dialog__title">Quernavigation starten</b>
+    <div class="mdl-dialog__content">
+                                <p>Sie haben Daten verändert. Sollen diese Änderungen beim Starten der Quernavigation gespeichert oder verworfen werden?</p>
+            </div>
+    <div class="mdl-dialog__actions">
+                    <button type="button" class="mdl-button mdl-js-button mdl-button--small close-btn">Abbrechen</button>
+            <button type="button" class="mdl-button mdl-js-button mdl-button--small mdl-button--colored quernav-no-save">
+                Änderungen verwerfen
+            </button>
+            <button type="button" class="mdl-button mdl-js-button mdl-button--small mdl-button--colored mdl-button--raised quernav-save">
+                Änderungen speichern
+            </button>
+            </div>
+</dialog>
+
+<script>
+    
+    function quernavSaveDialog() {
+        const dialog = document.getElementById('quernav_save_dialog');
+        if (dialog) {
+            dialog.querySelector('.close-btn').addEventListener('click', function () {
+                dialog.close();
+            });
+                        dialog.querySelector('.quernav-no-save').addEventListener('click', function () {
+                formChanged = false;
+                quernavSubmit(false);
+            });
+                        dialog.querySelector('.quernav-save').addEventListener('click', function () {
+                formChanged = false;
+                quernavSubmit(true);
+            });
+        }
+
+        if (!dialog.showModal) {
+            document.body.appendChild(dialog);
+            dialogPolyfill.registerDialog(dialog);
+        }
+
+        dialog.showModal();
+    }
+    
+</script>
+<!--  Formularklasse -->
+<SCRIPT type="text/javascript" LANGUAGE="JavaScript">
+	function NextEntry(){
+		//action ändern
+		document.standardformular.action = "index.php?pageid=22500&action=updateAndNext&id=f0c039a84fc469e6&transid=d5cf03";
+		//richtigen submit button aufrufen
+        $$('#standardformular .mdl-button[type="submit"]')[0].click();
+	}
+
+	function specialAction(){
+		document.standardformular.action = "index.php?pageid=22500&action=none&pageid=22501&id=f0c039a84fc469e6&transid=d5cf03";
+		if(document.standardformular.requestSubmit) {
+			document.standardformular.requestSubmit();
+		} else {
+			document.standardformular.submit();
+		}
+		return true;
+	}
+
+	function specialAction2(){
+		document.standardformular.action = "index.php?pageid=22500&action=&id=f0c039a84fc469e6&transid=d5cf03";
+		if(document.standardformular.requestSubmit) {
+			document.standardformular.requestSubmit();
+		} else {
+			document.standardformular.submit();
+		}
+		return true;
+	}
+</SCRIPT>
+
+
+
+
+<div class="cls-form " id="cls-form" >	<div class="cls-form--header-line sticky" id="frm-header-line"><div class="cls-form--header-sticky-detector-top" id="cls-form-header-sentinel-top" data-sentinel-position="top"></div><div class="cls-form--header-no-break" id="formheader"><h3 class="tabletitle cls-form--header-no-break">Mein KASCHUSO</h3></div><div class="cls-form--formicons" id="formicons"><div id="page_actions_container"></div>                         <div>|</div>                <button type="button" id="expand_all" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onclick="toggleAllFormGroups(true)"><i class="fas fa-chevron-double-down fa-xs"></i></button><div class='mdl-tooltip mdl-tooltip--left mdl-tooltip--line-wrap mdl-tooltip--large mdl-tooltip--l-width ' for='expand_all' id='mdl_tooltip_expand_all'>Alle Formulargruppen öffnen</div><script type='text/javascript'>document.body.appendChild(document.getElementById('mdl_tooltip_expand_all'));</script><button type="button" id="collapse_all" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onclick="toggleAllFormGroups(false)"><i class="fas fa-chevron-double-up fa-xs"></i></button><div class='mdl-tooltip mdl-tooltip--left mdl-tooltip--line-wrap mdl-tooltip--large mdl-tooltip--l-width ' for='collapse_all' id='mdl_tooltip_collapse_all'>Alle Formulargruppen schliessen</div><script type='text/javascript'>document.body.appendChild(document.getElementById('mdl_tooltip_collapse_all'));</script></div></div>    
+<script language="JavaScript" type="text/javascript">
+    
+    observeStickyChange('cls-form-header-sentinel-top', 'frm-header-line', 'cls-form--header-line--stuck-', '-5px');
+    
+</script>
+<span id="formgroup_hide" style="display: none;" class="printme formausblenden"> <a href="#!" onclick="javascript:$('formgroup').show();$('formgroup_hide').hide(); xajax_formgroup_visiblity('22500','standardformular','',1); return false;">einblenden</a><br></span>	<div style='max-width: 100%' class=''><div class='mdl-card mdl-shadow--2dp mdl-card--important ' id='filterabo_div_info' style='display: none;'><div class='mdl-progress mdl-js-progress mdl-progress__indeterminate' style='width: 100%; display: none;' id='filterabo_div_info_progress_bar'></div><div class='mdl-card__supporting-text' id='filterabo_div_info_card_content' style='display: block; max-height: auto; overflow: auto;'>Suche nach ähnlichen Angaben in der zentralen Datenhaltung läuft...</div></div></div><div style='max-width: 100%' class=''><div class='mdl-card mdl-shadow--2dp mdl-card--important ' id='filterabo_div' style='display: none;'><div class='mdl-progress mdl-js-progress mdl-progress__indeterminate' style='width: 100%; display: none;' id='filterabo_div_progress_bar'></div><div class='mdl-card__supporting-text' id='filterabo_div_card_content' style='display: block; max-height: auto; overflow: auto;'>Es wurden <span id="abofilter_count"></span> ähnliche Datensätze in der Mastertabelle gefunden.<div id="abofilter" style="max-height:80px; overflow: auto;"></div>Sie können die lokal nicht vorhandenen Datensätze auf der Tabelle abonnieren.</div></div></div>	
+		<div id="mydiv"   style="position:absolute;visibility:hidden;background-color:white;z-index:950;"></div>
+	<div id="treeDiv" style="position:absolute;visibility:hidden;background-color:white;z-index:950;"></div>
+
+	
+<!-- Formular definieren -->
+								<form name="standardformular" id="standardformular" enctype="multipart/form-data" method="post"
+      action="index.php?pageid=22500&action=update&id=f0c039a84fc469e6&amp;transid=d5cf03&tblName=meinSchulNetzSuS"
+      onReset="javascript: cancel(); return false;" autocomplete="off" >
+
+
+
+			
+	
+	
+<div id="formgroup0" class="mdl-card mdl-card--no-padding mdl-card--cls-form mdl-shadow--2dp" >
+		<div id="card_title_0" class="mdl-card__title mdl-card--cls-form-title mdl-card--title-collapse" onclick="toggleFormGroup(0)">
+		<span class="mdl-card--cls-form-subtitle">Kontaktangaben</span><div class="mdl-layout-spacer"></div><button id="toggle_form_0" type="button" class="mdl-button mdl-js-button mdl-button--icon cls-form--toggle_formgrup" data-formgroup="0" data-formgroup-visible="1"><i class="fas fa-chevron-up fa-xs"></i></button></div>
+	
+	<div id="card_fields_0" class="mdl-card__supporting-text mdl-card--cls-form-fields" >
+				<div class='mdl-grid mdl-grid--responsive mdl-grid--no-spacing'>
+	
+	
+							
+		
+		
+			<!-- Formularfeld 0 -->
+
+													
+													
+						
+										
+			<div class="mdl-cell mdl-cell--4-col mdl-cell--4-col--3-col-large-screen mdl-cell--8-col-tablet cls-form--row-0" style="" id="0_value">
+				<div>
+											
+
+
+
+    
+    
+    
+
+
+
+
+
+    
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--no-error "
+         style="">
+        <input class="mdl-textfield__input" type="text" name="f0" id="f0"
+                
+                              value="vorname.nachname@bbzsogr.ch" DISABLED  onchange="setFormChanged();">
+        <label class="mdl-textfield__label" for="f0">
+    <span id="0_label">E-Mail</span>
+    </label>
+                    </div>
+    <div class="cls-field-infos">
+    
+    
+    </div>
+
+
+
+<script>
+
+    if($('f0') && $('f0').addEventListener) {
+        $('f0').addEventListener('invalid', function (e) {
+            focusField('f0');
+        });
+    }
+
+    
+    label2numbers['E-Mail'] = 0;
+    lbl2fld['E-Mail'] = 'f0';
+</SCRIPT>
+									</div>
+			</div>
+									
+		
+		
+			<!-- Formularfeld 1 -->
+
+													
+													
+						
+										
+			<div class="mdl-cell mdl-cell--4-col mdl-cell--4-col--3-col-large-screen mdl-cell--8-col-tablet cls-form--row-0" style="" id="1_value">
+				<div>
+											
+
+
+
+    
+    
+    
+
+
+
+
+
+
+    
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--no-error" style="">
+                <input class="mdl-textfield__input" type="email"  name="f1" id="f1"
+               value="vorname.nachname@gmail.com"  onchange="setFormChanged();" >
+        <label class="mdl-textfield__label" for="f1">
+    <span id="1_label">Private E-Mail-Adresse</span>
+    </label>
+                    <span class="mdl-textfield__error">Ungültige E-Mail-Adresse.</span>
+            <span class="mdl-textfield__required">Dieses Feld darf nicht leer bleiben.</span>
+            <span class="errormessage"></span>
+                        </div>
+    <div class="cls-field-infos">
+            <span id="comment_1" tabindex="1000001" class="cls-form--field-info">
+            <i class="far fa-info-circle"></i>
+        </span>
+        <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--l-width" for="comment_1" id="comment_1_tooltip">
+            Hier können Sie eine private E-Mail-Adresse eingeben. Die offizielle Kommunikation der Schule (E-Mail-Versand) erfolgt nicht über diese E-Mail-Adresse, sondern in der Regel über die E-Mail-Adresse Ihres Schul-Accounts. 
+                    </div>
+    
+    
+    </div>
+
+
+<script>
+
+    if($('f1') && $('f1').addEventListener) {
+        $('f1').addEventListener('invalid', function (e) {
+            focusField('f1');
+        });
+    }
+
+    
+    label2numbers['Private E-Mail-Adresse'] = 1;
+    lbl2fld['Private E-Mail-Adresse'] = 'f1';
+</SCRIPT>
+									</div>
+			</div>
+									
+		
+		
+			<!-- Formularfeld 2 -->
+
+													
+													
+										<div class="mdl-cell mdl-cell--12-col mdl-cell--no-margin"></div>
+							
+										
+			<div class="mdl-cell mdl-cell--4-col mdl-cell--4-col--3-col-large-screen mdl-cell--8-col-tablet cls-form--row-2" style="" id="2_value">
+				<div>
+											
+
+
+
+    
+    
+    
+
+
+
+
+
+    
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--no-error "
+         style="">
+        <input class="mdl-textfield__input" type="text" name="f2" id="f2"
+                
+                              value="+41 77 446 62 56" DISABLED  onchange="setFormChanged();">
+        <label class="mdl-textfield__label" for="f2">
+    <span id="2_label">Handy Nummer</span>
+            <i class="fas fa-sync-alt fa-xs" id="sync_2" tabindex="1000002" style="color: #4cab4b; pointer-events: all;"></i>
+        <div class="mdl-tooltip mdl-tooltip--right" for="sync_2">
+            Dieses Feld wird zentral geführt
+        </div>
+    </label>
+                    </div>
+    <div class="cls-field-infos">
+            <span id="comment_2" tabindex="1000002" class="cls-form--field-info">
+            <i class="far fa-info-circle"></i>
+        </span>
+        <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--l-width" for="comment_2" id="comment_2_tooltip">
+            Geben Sie hier Ihre Handynummer ein, damit Sie über SMS Nachrichten empfangen können. Die Handynummer wird nicht auf der Schülerliste veröffentlicht. Verwenden Sie bitte das Format +41 79 123 45 67.
+                    </div>
+    
+    
+    </div>
+
+
+
+<script>
+
+    if($('f2') && $('f2').addEventListener) {
+        $('f2').addEventListener('invalid', function (e) {
+            focusField('f2');
+        });
+    }
+
+    
+    label2numbers['Handy Nummer'] = 2;
+    lbl2fld['Handy Nummer'] = 'f2';
+</SCRIPT>
+									</div>
+			</div>
+									
+								</div></div></div>						
+<div id="formgroup1" class="mdl-card mdl-card--no-padding mdl-card--cls-form mdl-shadow--2dp" >
+		<div id="card_title_1" class="mdl-card__title mdl-card--cls-form-title mdl-card--title-collapse" onclick="toggleFormGroup(1)">
+		<span class="mdl-card--cls-form-subtitle">Einstellungen</span><div class="mdl-layout-spacer"></div><button id="toggle_form_1" type="button" class="mdl-button mdl-js-button mdl-button--icon cls-form--toggle_formgrup" data-formgroup="1" data-formgroup-visible="1"><i class="fas fa-chevron-up fa-xs"></i></button></div>
+	
+	<div id="card_fields_1" class="mdl-card__supporting-text mdl-card--cls-form-fields" >
+				<div class='mdl-grid mdl-grid--responsive mdl-grid--no-spacing'>		
+		
+			<!-- Formularfeld 3 -->
+
+													
+													
+										<div class="mdl-cell mdl-cell--12-col mdl-cell--no-margin"></div>
+							
+										
+			<div class="mdl-cell mdl-cell--4-col mdl-cell--4-col--3-col-large-screen mdl-cell--8-col-tablet cls-form--row-3" style="" id="3_value">
+				<div>
+											
+
+
+
+    
+    
+    
+
+
+
+
+
+    
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--no-error "
+         style="">
+        <input class="mdl-textfield__input" type="text" name="f3" id="f3"
+               pattern=".{0,4}" 
+                              value="3214"   onchange="setFormChanged();">
+        <label class="mdl-textfield__label" for="f3">
+    <span id="3_label">PIN für schulNetz.mobile</span>
+    </label>
+                    <span class="mdl-textfield__required">Dieses Feld darf nicht leer bleiben.</span>
+            <span class="mdl-textfield__error">Minimale Länge: 0, maximale Länge: 4</span>
+            <span class="errormessage"></span>
+                                </div>
+    <div class="cls-field-infos">
+            <span id="comment_3" tabindex="1000003" class="cls-form--field-info">
+            <i class="far fa-info-circle"></i>
+        </span>
+        <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--l-width" for="comment_3" id="comment_3_tooltip">
+            Geben Sie hier einen 4 stelligen PIN für schulNetz.mobile ein.
+                    </div>
+    
+    
+    </div>
+
+
+
+<script>
+
+    if($('f3') && $('f3').addEventListener) {
+        $('f3').addEventListener('invalid', function (e) {
+            focusField('f3');
+        });
+    }
+
+    
+    label2numbers['PIN für schulNetz.mobile'] = 3;
+    lbl2fld['PIN für schulNetz.mobile'] = 'f3';
+</SCRIPT>
+									</div>
+			</div>
+									
+		
+		
+			<!-- Formularfeld 4 -->
+
+													
+													
+						
+										
+			<div class="mdl-cell mdl-cell--4-col mdl-cell--4-col--3-col-large-screen mdl-cell--8-col-tablet cls-form--row-3" style="" id="4_value">
+				<div>
+											
+
+
+
+    
+    
+    
+
+
+
+
+
+
+    
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--no-error" style="">
+        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]+"  required
+               name="f4" id="f4" maxlength="5" value="1000"
+               onkeyup="ChangeNumeric(event, this, 1); setFormChanged();">
+        <label class="mdl-textfield__label" for="f4">
+    <span id="4_label">Tabellenzeilen pro Seite *</span>
+    </label>
+                    <span class="mdl-textfield__error">Kein ganzzahliger, numerischer Wert.</span>
+            <span class="mdl-textfield__required">Dieses Feld darf nicht leer bleiben.</span>
+            <span class="errormessage"></span>
+                            <span class="errormessage"></span>
+                        </div>
+    <div class="cls-field-infos">
+            <span id="comment_4" tabindex="1000004" class="cls-form--field-info">
+            <i class="far fa-info-circle"></i>
+        </span>
+        <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--l-width" for="comment_4" id="comment_4_tooltip">
+            Wählen Sie die Anzahl der Einträge einer Tabelle, die auf einer Seite angezeigt werden sollen. Diese Anzahl wird in allen Tabellen des Programms verwendet.
+                    </div>
+    
+    
+    </div>
+
+
+
+<script>
+
+    if($('f4') && $('f4').addEventListener) {
+        $('f4').addEventListener('invalid', function (e) {
+            focusField('f4');
+        });
+    }
+
+    
+    label2numbers['Tabellenzeilen pro Seite'] = 4;
+    lbl2fld['Tabellenzeilen pro Seite'] = 'f4';
+</SCRIPT>
+									</div>
+			</div>
+									
+		
+		
+			<!-- Formularfeld 5 -->
+
+													
+													
+										<div class="mdl-cell mdl-cell--12-col mdl-cell--no-margin"></div>
+							
+										
+			<div class="mdl-cell mdl-cell--4-col mdl-cell--4-col--3-col-large-screen mdl-cell--8-col-tablet cls-form--row-5" style="display: none;" id="5_value">
+				<div>
+											
+
+
+
+    
+    
+    
+
+
+
+
+
+
+    
+                
+    
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--no-error" style="auto; display: none;">
+            <select  class="mdl-textfield__input" name="f5" id="f5" onchange="setFormChanged();"
+                    style="width: auto;">
+                                <option value="0">Deutsch</option>
+<option value="1">English</option>
+<option value="2">Français</option>
+
+            </select>
+
+            <label class="mdl-textfield__label" for="f5">
+    <span id="5_label">Sprache</span>
+            <i class="fas fa-sync-alt fa-xs" id="sync_5" tabindex="1000005" style="color: #4cab4b; pointer-events: all;"></i>
+        <div class="mdl-tooltip mdl-tooltip--right" for="sync_5">
+            Dieses Feld wird zentral geführt
+        </div>
+    </label>
+                    </div>
+    
+    
+    
+    <div class="cls-field-infos">
+            <span id="comment_5" tabindex="1000005" class="cls-form--field-info">
+            <i class="far fa-info-circle"></i>
+        </span>
+        <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--l-width" for="comment_5" id="comment_5_tooltip">
+            Hier können Sie (bald einmal) die Sprache der Applikation wählen.
+                    </div>
+    
+    
+    </div>
+    
+
+
+<script>
+
+    if($('f5') && $('f5').addEventListener) {
+        $('f5').addEventListener('invalid', function (e) {
+            focusField('f5');
+        });
+    }
+
+    
+    label2numbers['Sprache'] = 5;
+    lbl2fld['Sprache'] = 'f5';
+</SCRIPT>
+									</div>
+			</div>
+									
+		
+		
+			<!-- Formularfeld 6 -->
+
+													
+													
+										<div class="mdl-cell mdl-cell--12-col mdl-cell--no-margin"></div>
+							
+										
+			<div class="mdl-cell mdl-cell--8-col mdl-cell--4-col--3-col-large-screen mdl-cell--8-col-tablet cls-form--row-6" style="" id="6_value">
+				<div>
+											
+
+
+
+    
+    
+    
+
+
+
+
+
+
+    
+    <div class="cls-form--label-container">
+        <div class="cls-label" id="6_label">
+    Anzeige Terminliste
+</div>
+<div class="cls-field-infos">
+    
+            <span id="comment_6" tabindex="1000006" class="cls-form--field-info">
+            <i class="far fa-info-circle"></i>
+        </span>
+        <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--l-width" for="comment_6" id="comment_6_tooltip">
+            Die Anzeige unter Agenda/Terminliste kann hier eingeschränkt werden.
+                    </div>
+    
+            
+
+                                <span id="mutation_6" tabindex="1000006" style="display: none;">
+                <i onclick="$('logWindowTitle_6').toggle(); $('logWindow_6').toggle();"
+                   class="fal fa-calendar-exclamation"></i>
+            </span>
+            <script>xajax_show_data_log_single('standardformular', '6', 'terminmutation');</script>
+            <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--xl-width"
+                 for="mutation_6" id="logWindow_6">
+                Information wird geladen...
+            </div>
+            </div>        <div style='background:#fff; overflow-x:hidden; overflow-y: auto; height:15em; border: 1px solid rgba(0,0,0,.12); padding-left: 5px;'>
+                            <div>
+                                        <a href="#!" onclick="setAllMdlCheckBoxes('dropm-input-f6', true);" style="font-size: smaller; margin: 2px;">
+                        alle auswählen
+                    </a>&nbsp;|&nbsp;
+                    <a href="#!" onclick="setAllMdlCheckBoxes('dropm-input-f6', false);" style="font-size: smaller; margin: 2px;">
+                        alle abwählen
+                    </a>
+                                    </div>
+            
+                        <div id="dropm_f6_content">
+                                    <div class="mdl-checkbox__label mdl-checkbox__label--nowrap dropm-span-f6-no-elements" style="display: none;">
+                Keine Einträge gefunden
+            </div>
+            </div>
+
+                                            <a href="#!" onclick="setAllMdlCheckBoxes('dropm-input-f6', true);" style="font-size: smaller; margin: 2px;">
+                    alle auswählen
+                </a>&nbsp;|&nbsp;
+                <a href="#!" onclick="setAllMdlCheckBoxes('dropm-input-f6', false);" style="font-size: smaller; margin: 2px;">
+                    alle abwählen
+                </a>
+                                    </div>
+    </div>
+
+
+
+<script>
+
+    if($('f6') && $('f6').addEventListener) {
+        $('f6').addEventListener('invalid', function (e) {
+            focusField('f6');
+        });
+    }
+
+    
+    label2numbers['Anzeige Terminliste'] = 6;
+    lbl2fld['Anzeige Terminliste'] = 'f6';
+</SCRIPT>
+									</div>
+			</div>
+									
+								</div></div></div>						
+<div id="formgroup2" class="mdl-card mdl-card--no-padding mdl-card--cls-form mdl-shadow--2dp" style="display: none;">
+		<div id="card_title_2" class="mdl-card__title mdl-card--cls-form-title mdl-card--title-collapse" onclick="toggleFormGroup(2)">
+		<span class="mdl-card--cls-form-subtitle">Fotoupload</span><div class="mdl-layout-spacer"></div><button id="toggle_form_2" type="button" class="mdl-button mdl-js-button mdl-button--icon cls-form--toggle_formgrup" data-formgroup="2" data-formgroup-visible="1"><i class="fas fa-chevron-up fa-xs"></i></button></div>
+	
+	<div id="card_fields_2" class="mdl-card__supporting-text mdl-card--cls-form-fields" >
+				<div class='mdl-grid mdl-grid--responsive mdl-grid--no-spacing'>		
+		
+			<!-- Formularfeld 7 -->
+
+													
+													
+										<div class="mdl-cell mdl-cell--12-col mdl-cell--no-margin"></div>
+							
+										
+			<div class="mdl-cell mdl-cell--4-col mdl-cell--4-col--3-col-large-screen mdl-cell--8-col-tablet cls-form--row-7" style="" id="7_value">
+				<div>
+											
+
+
+
+    
+    
+    
+
+
+
+
+
+
+        <div class="cls-form--label-container">
+        <div class="cls-label" id="7_label">
+    Foto
+</div>
+<div class="cls-field-infos">
+    
+            <span id="comment_7" tabindex="1000007" class="cls-form--field-info">
+            <i class="far fa-info-circle"></i>
+        </span>
+        <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--l-width" for="comment_7" id="comment_7_tooltip">
+            Hier können Sie ein aktuelles Portraitfoto hochladen. Bitte Gesicht formatfüllend und mittig platzieren.
+                    </div>
+    
+            
+
+            </div>        <input type="HIDDEN" name="MAX_FILE_SIZE" value="3000000">
+        <input type="hidden" name="f7" id="b64_f7" value="nochange">
+        <input type="file" id="img_f7" accept="image/*"  style="display: none;">
+        <table style="margin-top: 5px;">
+            <tr>
+                <td>
+                    <div id="cropped_f7" style="display: none;"></div>
+                </td>
+                <td>
+                    <button type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onclick="$('img_f7').click();"
+                            id="croppie_f7_upload">
+                        <i class="far fa-image fa-xs"></i>
+                    </button>
+                    <button type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-button--red" onclick="removePicture('f7');"
+                            style="display: none;" id="croppie_f7_delete">
+                        <i class="far fa-trash-alt fa-xs"></i>
+                    </button>
+                    <button type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onclick="croppie_f7.rotate(90);"
+                            style="display: none;" id="croppie_f7_rotate_cw">
+                        <i class="far fa-undo fa-xs fa-flip-horizontal"></i>
+                    </button>
+                    <button type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onclick="croppie_f7.rotate(-90);"
+                            style="display: none;" id="croppie_f7_rotate_ccw">
+                        <i class="far fa-undo fa-xs"></i>
+                    </button>
+                    <div class='mdl-tooltip mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--large mdl-tooltip--l-width ' for='croppie_f7_upload' id='mdl_tooltip_croppie_f7_upload'>Neues Foto hochladen</div>                    <div class='mdl-tooltip mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--large mdl-tooltip--l-width ' for='croppie_f7_delete' id='mdl_tooltip_croppie_f7_delete'>Foto löschen</div>                    <div class='mdl-tooltip mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--large mdl-tooltip--l-width ' for='croppie_f7_rotate_cw' id='mdl_tooltip_croppie_f7_rotate_cw'>Foto im Uhrzeigersinn drehen</div>                    <div class='mdl-tooltip mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--large mdl-tooltip--l-width ' for='croppie_f7_rotate_ccw' id='mdl_tooltip_croppie_f7_rotate_ccw'>Foto gegen Uhrzeigersinn drehen</div>                </td>
+            </tr>
+        </table>
+
+        <script>
+                                    var croppie_f7 = new Croppie($('cropped_f7'), {
+                enableExif: true,
+                enableOrientation: true,
+                viewport: {
+                    width: 200,
+                    height: 200,
+                },
+                boundary: {
+                    width: 250,
+                    height: 250
+                },
+                update: function (data) {
+                    croppie_f7.result('rawcanvas')
+                    .then(function(r){
+                                                var destCanvas = document.createElement('canvas');
+                        destCanvas.width = 200;
+                        destCanvas.height = 200;
+                        var destCtx = destCanvas.getContext('2d');
+                        destCtx.drawImage(r, 0, 0, 200, 200);
+                        $('b64_f7').value = destCanvas.toDataURL("image/png");
+                    });
+                }
+            });
+            $('img_f7').on('change', function () {
+                readFile(this, croppie_f7, 'f7');
+                $('croppie_f7_delete').style.display = 'block';
+                $('croppie_f7_rotate_cw').style.display = 'block';
+                $('croppie_f7_rotate_ccw').style.display = 'block';
+            });
+
+                                                setTimeout(function(){
+                croppie_f7.bind({
+                    url: 'index.php?pageid=1013&id=f0c039a84fc469e6&transid=d5cf03&name=2c0fb5601969aa3b81a002c4de9d5dbb.jpg'
+                })
+                    .then(function(){
+                        $('b64_f7').value = 'nochange';
+                    }
+                    );
+                $('cropped_f7').style.display = 'block';
+                $('croppie_f7_delete').style.display = 'block';
+                $('croppie_f7_rotate_cw').style.display = 'block';
+                $('croppie_f7_rotate_ccw').style.display = 'block';
+            }, 1000);
+                    </script>
+    </div>
+
+
+
+
+
+<script>
+
+    if($('f7') && $('f7').addEventListener) {
+        $('f7').addEventListener('invalid', function (e) {
+            focusField('f7');
+        });
+    }
+
+    
+    label2numbers['Foto'] = 7;
+    lbl2fld['Foto'] = 'f7';
+</SCRIPT>
+									</div>
+			</div>
+									
+								</div></div></div>						
+<div id="formgroup3" class="mdl-card mdl-card--no-padding mdl-card--cls-form mdl-shadow--2dp" style="display: none;">
+		<div id="card_title_3" class="mdl-card__title mdl-card--cls-form-title mdl-card--title-collapse" onclick="toggleFormGroup(3)">
+		<span class="mdl-card--cls-form-subtitle">Email</span><div class="mdl-layout-spacer"></div><button id="toggle_form_3" type="button" class="mdl-button mdl-js-button mdl-button--icon cls-form--toggle_formgrup" data-formgroup="3" data-formgroup-visible="1"><i class="fas fa-chevron-up fa-xs"></i></button></div>
+	
+	<div id="card_fields_3" class="mdl-card__supporting-text mdl-card--cls-form-fields" >
+				<div class='mdl-grid mdl-grid--responsive mdl-grid--no-spacing'>		
+		
+			<!-- Formularfeld 8 -->
+
+													
+													
+										<div class="mdl-cell mdl-cell--12-col mdl-cell--no-margin"></div>
+							
+										
+			<div class="mdl-cell mdl-cell--8-col mdl-cell--4-col--3-col-large-screen mdl-cell--8-col-tablet cls-form--row-8" style="display: none;" id="8_value">
+				<div>
+											
+
+
+
+    
+    
+    
+
+
+
+
+
+
+        <div class="cls-form--label-container">
+                    <div class="cls-label" id="8_label">
+    E-Mail-Signatur
+</div>
+<div class="cls-field-infos">
+    
+            <span id="comment_8" tabindex="1000008" class="cls-form--field-info">
+            <i class="far fa-info-circle"></i>
+        </span>
+        <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right mdl-tooltip--line-wrap mdl-tooltip--l-width" for="comment_8" id="comment_8_tooltip">
+            Die E-Mail-Signatur wird im Bereich Kommunikation verwendet.
+                    </div>
+    
+            
+
+            </div>                <div class="">
+            <textarea class="mdl-textfield__input mdl-textarea mdl-textarea--border mceEditor" type="text" rows= "10" id="f8"
+                      onchange=&quot;setFormChanged();&quot; name="f8"  onchange="enableFormButtons('standardformular');" 
+                      data-max-length="100000" data-max-length-error="Maximale Länge: 100000"></textarea>
+                            <label class="mdl-textfield__label" for="f8"></label>
+                                        <span class="mdl-textfield__error">Maximale Länge: 100000</span>
+                <span class="mdl-textfield__required">Dieses Feld darf nicht leer bleiben.</span>
+                <span class="errormessage"></span>
+                                    </div>
+            </div>
+
+
+
+
+<script>
+
+    if($('f8') && $('f8').addEventListener) {
+        $('f8').addEventListener('invalid', function (e) {
+            focusField('f8');
+        });
+    }
+
+    
+    label2numbers['E-Mail-Signatur'] = 8;
+    lbl2fld['E-Mail-Signatur'] = 'f8';
+</SCRIPT>
+									</div>
+			</div>
+									
+								</div></div></div>						
+<div id="formgroup4" class="mdl-card mdl-card--no-padding mdl-card--cls-form mdl-shadow--2dp" >
+		<div id="card_title_4" class="mdl-card__title mdl-card--cls-form-title mdl-card--title-collapse" onclick="toggleFormGroup(4)">
+		<span class="mdl-card--cls-form-subtitle">iCal-Download/-Abo</span><div class="mdl-layout-spacer"></div><button id="toggle_form_4" type="button" class="mdl-button mdl-js-button mdl-button--icon cls-form--toggle_formgrup" data-formgroup="4" data-formgroup-visible="1"><i class="fas fa-chevron-up fa-xs"></i></button></div>
+	
+	<div id="card_fields_4" class="mdl-card__supporting-text mdl-card--cls-form-fields" >
+				<div class='mdl-grid mdl-grid--responsive mdl-grid--no-spacing'>		
+		
+			<!-- Formularfeld 9 -->
+
+													
+													
+										<div class="mdl-cell mdl-cell--12-col mdl-cell--no-margin"></div>
+							
+										
+			<div class="mdl-cell mdl-cell--4-col mdl-cell--4-col--3-col-large-screen mdl-cell--8-col-tablet cls-form--row-9" style="" id="9_value">
+				<div>
+											
+
+
+
+    
+    
+    
+
+
+
+
+
+
+    
+    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+        <input type="checkbox" class="mdl-checkbox__input" id="f9" name="f9" checked                onchange="setFormChanged();"/>
+        <span class="mdl-checkbox__label mdl-checkbox__label--nowrap dropm-span-f9" id="9_label">
+            Inkl. Stundenplan
+            <div class="cls-field-infos">
+    
+    
+    </div>        </span>
+    </label>
+
+
+
+
+<script>
+
+    if($('f9') && $('f9').addEventListener) {
+        $('f9').addEventListener('invalid', function (e) {
+            focusField('f9');
+        });
+    }
+
+    
+    label2numbers['Inkl. Stundenplan'] = 9;
+    lbl2fld['Inkl. Stundenplan'] = 'f9';
+</SCRIPT>
+									</div>
+			</div>
+									
+		
+		
+			<!-- Formularfeld 10 -->
+
+													
+													
+										<div class="mdl-cell mdl-cell--12-col mdl-cell--no-margin"></div>
+							
+										
+			<div class="mdl-cell mdl-cell--4-col mdl-cell--4-col--3-col-large-screen mdl-cell--8-col-tablet cls-form--row-10" style="" id="10_value">
+				<div>
+											
+
+
+
+    
+    
+    
+
+
+
+
+
+
+    
+    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+        <input type="checkbox" class="mdl-checkbox__input" id="f10" name="f10" checked                onchange="setFormChanged();"/>
+        <span class="mdl-checkbox__label mdl-checkbox__label--nowrap dropm-span-f10" id="10_label">
+            Inkl. Termine
+            <div class="cls-field-infos">
+    
+    
+    </div>        </span>
+    </label>
+
+
+
+
+<script>
+
+    if($('f10') && $('f10').addEventListener) {
+        $('f10').addEventListener('invalid', function (e) {
+            focusField('f10');
+        });
+    }
+
+    
+    label2numbers['Inkl. Termine'] = 10;
+    lbl2fld['Inkl. Termine'] = 'f10';
+</SCRIPT>
+									</div>
+			</div>
+									
+		
+		
+			<!-- Formularfeld 11 -->
+
+													
+													
+										<div class="mdl-cell mdl-cell--12-col mdl-cell--no-margin"></div>
+							
+										
+			<div class="mdl-cell mdl-cell--4-col mdl-cell--4-col--3-col-large-screen mdl-cell--8-col-tablet cls-form--row-11" style="" id="11_value">
+				<div>
+											
+
+
+
+    
+    
+    
+
+
+
+
+
+
+    
+    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+        <input type="checkbox" class="mdl-checkbox__input" id="f11" name="f11" checked                onchange="setFormChanged();"/>
+        <span class="mdl-checkbox__label mdl-checkbox__label--nowrap dropm-span-f11" id="11_label">
+            Inkl. Prüfungen
+            <div class="cls-field-infos">
+    
+    
+    </div>        </span>
+    </label>
+
+
+
+
+<script>
+
+    if($('f11') && $('f11').addEventListener) {
+        $('f11').addEventListener('invalid', function (e) {
+            focusField('f11');
+        });
+    }
+
+    
+    label2numbers['Inkl. Prüfungen'] = 11;
+    lbl2fld['Inkl. Prüfungen'] = 'f11';
+</SCRIPT>
+									</div>
+			</div>
+			
+
+		<input type="hidden"  name="listindex">
+
+		<input type="hidden" name="varsize" value="ca4c542dd36f56fb1efeaa0ee662f435">
+	
+
+        </div></div></div>
+        <div class="cls-form--buttons-container" id="buttons-container">
+        <div class="cls-form--buttons-gradient" id="buttons-gradient">
+    </div>
+    <div class="mdl-card mdl-shadow--2dp printme">
+        <div id="buttons_title" class="mdl-card__title mdl-card--cls-form-title">
+            <span class="mdl-card--cls-form-subtitle">Aktionen</span>&nbsp;
+                    </div>
+
+		    <div class="mdl-card__supporting-text" id='timeeditdiv' style="display: none;">
+                <p><b>Terminmutation</b></p>
+                <p> Eben eingetragene Änderungen an den Attributen des angezeigten Datensatzes werden erst am gewünschten Datum ausgeführt. Sie können auch bereits jetzt das Zurücksetzen der Änderungen auf den Ursprungswert erfassen. Lassen Sie die Datumsfelder leer, um die Änderungen sofort zu übernehmen resp. nicht mehr zurückzusetzen.</p>
+                <p style="display: none; color: red;" id="timeediterror"></p>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--no-error mdl-textfield--icon-right" style="width: 150px;">
+                    <input type="text" id="timeeditdate" name="timeeditdate" class="mdl-textfield__input" onChange="flexDate(this);" OnKeyUp="ChangeDate(event, this);">
+                    <label class="mdl-textfield__label" for="timeeditdate">Ausführen am</label>
+                    <button id="timeeditdate_trigger" type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                        <i class="fal fa-calendar-alt fa-xs"></i>
+                    </button>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--no-error mdl-textfield--icon-right" style="width: 150px;">
+                    <input type="text" id="timeeditdatedeletion" name="timeeditdatedeletion" class="mdl-textfield__input" onChange="flexDate(this);" OnKeyUp="ChangeDate(event, this);">
+                    <label class="mdl-textfield__label" for="timeeditdatedeletion">Zurücksetzen am</label>
+                    <button id="timeeditdatedeletion_trigger" type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                        <i class="fal fa-calendar-alt fa-xs"></i>
+                    </button>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-textfield--no-error" style="width: 300px;">
+                    <input type="text" id="timeeditcomment" name="timeeditcomment" class="mdl-textfield__input">
+                    <label class="mdl-textfield__label" for="timeeditcomment">Kommentar</label>
+                </div>
+
+            </div>
+
+
+        <div id="buttons_actions" class="mdl-card__actions">
+            
+                            <input class="mdl-button mdl-js-button mdl-button--small mdl-button--colored mdl-button--raised" type="submit" id="standardformular_submit" value="Erfassen"
+                       onClick="formChanged = false; return check_critical_signs();" >
+                                    <input class="mdl-button mdl-js-button mdl-button--small mdl-button--raised" type="button" id="standardformular_specialaction" value="Passwort ändern" onClick="formChanged = false; specialAction();" >
+                                                                                <input class="mdl-button mdl-js-button mdl-button--small" type="reset" value="Änderungen verwerfen"
+                       onclick="formChanged = false; ">
+            
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+        testStickySupport('buttons-container', 'bottom');
+</script></form>
+
+
+		<SCRIPT LANGUAGE="JavaScript">
+        $('standardformular').addEventListener('input', function() {
+            // sobald eine Eingabe im Formular passiert, werden die speicher-Knöpfe angezeigt
+            enableFormButtons('standardformular');
+			});
+	</SCRIPT>
+
+
+
+
+</div>
+<br><br>
+
+
+
+
+
+
+</div></main></div></main></div>
+
+</div> <!-- Ende MainContent -->
+
+
+
+
+</body>
+</html>

@@ -74,22 +74,17 @@ async function authenticate(mandator, username, password) {
         headers: headers,
         maxRedirects: 0
     });
-    
-    let param = sesJS.data.match(SES_PARAM_REGEX)[1];
-    let action = 'auth?' + param + '=' + cryptoRandomString({length: 32, type: 'hex'});
 
-    const currentRequestedPage = cheerio.load(formRes.data)('input[name=currentRequestedPage]').attr('value');
-    
     let loginHeaders = Object.assign({}, headers);
     loginHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
 
     // make login
 
-    const loginRes = await axios.post(LOGIN_URL + action, 
+    const loginRes = await axios.post(LOGIN_URL + getActionFromSesJs(sesJS.data), 
         qs.stringify({
             userid: username,
             password: password,
-            currentRequestedPage: currentRequestedPage
+            currentRequestedPage: getCurrentRequestedPageFromHtml(formRes.data)
         }),
         {
             withCredentials: true,
@@ -111,14 +106,32 @@ async function authenticate(mandator, username, password) {
     return cookies;
 }
 
+function getCurrentRequestedPageFromHtml(html) {
+    return cheerio.load(html)('input[name=currentRequestedPage]').attr('value');
+}
+
+function getActionFromSesJs(html) {
+    const param = html.match(SES_PARAM_REGEX)[1];
+    return 'auth?' + param + '=' + cryptoRandomString({ length: 32, type: 'hex' });
+}
 
 async function getUserInfo(mandator, username, password) {
     console.log('Getting user info for: ' + username);
 
     const { headers, homeData } = await getHomepageAndHeaders(mandator, username, password);
 
-    const $home = cheerio.load(homeData);
-    const infos = {}
+    const settingsRes = await axios.get(findUrlByPageid(mandator, homeData, SETTINGS_PAGE_ID), {
+        withCredentials: true,
+        headers: headers,
+        maxRedirects: 0
+    });
+
+    return getUserInfoFromHtml(homeData, settingsRes.data, mandator, username);
+}
+
+function getUserInfoFromHtml(homeHtml, settingsHtml, mandator, username) {
+    const $home = cheerio.load(homeHtml);
+    const infos = {};
     $home('#content-card > div > div > table')
         .find('tbody > tr')
         .toArray()
@@ -126,21 +139,15 @@ async function getUserInfo(mandator, username, password) {
             const row = $home(x)
                 .find('td')
                 .toArray()
-                .map(x => $home(x).text())
+                .map(x => $home(x).text());
             infos[row[0]] = row[1];
         });
 
-    const settingsRes = await axios.get(findUrl(mandator, homeData, SETTINGS_PAGE_ID), {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0
-    });
-   
-    const $settings = cheerio.load(settingsRes.data);
-   
+    const $settings = cheerio.load(settingsHtml);
+
     const email = $settings('#f0').attr('value');
     const privateEmail = $settings('#f1').attr('value');
-    
+
     return {
         mandator: mandator,
         username: username,
@@ -154,7 +161,7 @@ async function getUserInfo(mandator, username, password) {
         mobile: infos['Mobiltelefon'],
         email: email,
         privateEmail: privateEmail,
-    }
+    };
 }
 
 async function getGrades(mandator, username, password) {
@@ -162,13 +169,17 @@ async function getGrades(mandator, username, password) {
     
     const { headers, homeData } = await getHomepageAndHeaders(mandator, username, password);
 
-    const gradesRes = await axios.get(findUrl(mandator, homeData, GRADES_PAGE_ID), {
+    const gradesRes = await axios.get(findUrlByPageid(mandator, homeData, GRADES_PAGE_ID), {
         withCredentials: true,
         headers: headers,
         maxRedirects: 0
     });
 
-    const $ = cheerio.load(gradesRes.data);
+    return getGradesFromHtml(gradesRes.data);
+} 
+
+function getGradesFromHtml(html) {
+    const $ = cheerio.load(html);
 
     return $('#uebersicht_bloecke>page>div>table')
         // find table with grades for each subject
@@ -184,7 +195,7 @@ async function getGrades(mandator, username, password) {
             const clazz = subjectsRowCells[0].match('<b>([^<]*)<\\/b>')[1];
             const name = subjectsRowCells[0].match('<br>([^<]*)')[1];
             const average = subjectsRowCells[1].trim();
-            
+
             // find all grades for a subject 
             const grades = $(x).find('tbody>tr')
                 .toArray()
@@ -195,7 +206,7 @@ async function getGrades(mandator, username, password) {
                         .find('td')
                         .toArray()
                         .map(x => $(x).text().trim());
-                        
+
                     const valuePoints = markRowCells[2].split('\n');
                     const value = valuePoints[0] ? valuePoints[0] : undefined;
                     const points = valuePoints[1] ? valuePoints[1].match('Punkte: (\\d*)')[1] : undefined;
@@ -214,21 +225,25 @@ async function getGrades(mandator, username, password) {
                 grades: grades
             };
         });
-} 
+}
 
 async function getAbsences(mandator, username, password) {
     console.log('Getting absences for: ' + username);
     
     const { headers, homeData } = await getHomepageAndHeaders(mandator, username, password);
 
-    const absencesRes = await axios.get(findUrl(mandator, homeData, ABSENCES_PAGE_ID), {
+    const absencesRes = await axios.get(findUrlByPageid(mandator, homeData, ABSENCES_PAGE_ID), {
         withCredentials: true,
         headers: headers,
         maxRedirects: 0
     });
 
-    const $ = cheerio.load(absencesRes.data);
-    
+    return getAbsencesFromHtml(absencesRes.data);
+}
+
+function getAbsencesFromHtml(html) {
+    const $ = cheerio.load(html);
+
     return $('#uebersicht_bloecke>page>div>form>table')
         // find table with grades for each subject
         .find('tbody>tr')
@@ -242,7 +257,7 @@ async function getAbsences(mandator, username, password) {
                 .map(x => $(x).text().trim());
 
             const reason = $(x).find('td > div > input').attr('value');
-            
+
             return {
                 date: absenceRowCells[0],
                 time: absenceRowCells[1],
@@ -264,25 +279,26 @@ async function getMandators() {
             withCredentials: true,
             headers: headers,
             maxRedirects: 0
-        }).then(res => {
-            const $ = cheerio.load(res.data);
-        
-            return $('body')
-                .find('a')
-                .toArray()
-                .map(x => {
-                    const url = $(x).attr('href');
-                    return {
-                        name: url ? url.substr(url.lastIndexOf('/') + 1) : undefined,
-                        description: $(x).text().trim(),
-                        url: url
-                    };
-                });
-        });
-    
+        }).then(res => getMandatorsFromHtml(res.data));
 }
 
-function findUrl(mandator, html, pageid) {
+function getMandatorsFromHtml(html) {
+    const $ = cheerio.load(html);
+
+    return $('body')
+        .find('a')
+        .toArray()
+        .map(x => {
+            const url = $(x).attr('href');
+            return {
+                name: url ? url.substr(url.lastIndexOf('/') + 1) : undefined,
+                description: $(x).text().trim(),
+                url: url
+            };
+        });
+}
+
+function findUrlByPageid(mandator, html, pageid) {
     return BASE_URL + mandator + '/' + html.match('"(index\\.php\\?pageid=' + pageid + '[^"]*)"')[1];
 }
 
@@ -332,7 +348,7 @@ async function getCookies(mandator, username, password) {
     return cookies;
 }
 
-function storeCookies(mandator, username, cookies) {
+function storeCookies(cookiesMap, mandator, username, cookies) {
     cookiesMap[mandator + ":" + username] = cookies;
 }
 
@@ -379,5 +395,13 @@ module.exports = {
     getAbsences,
     getMandators,
     // for testing 
-    getCookiesFromHeaders
+    getCookiesFromHeaders,
+    toCookieHeaderString,
+    findUrlByPageid,
+    getMandatorsFromHtml,
+    getAbsencesFromHtml,
+    getGradesFromHtml,
+    getUserInfoFromHtml,
+    getCurrentRequestedPageFromHtml,
+    getActionFromSesJs
 };

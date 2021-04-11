@@ -1,0 +1,163 @@
+
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Anmeldung KASCHUSO</title>
+		
+<!-- SLS JavaScripts -->
+<script language="JavaScript">
+	var formSubmitted = false;
+	function checkFormSubmit(){
+		if(formSubmitted == false){
+			formSubmitted = true;
+			return formSubmitted;
+		}
+		return false;
+	}
+	
+	function submitForm(formName) {
+		if(checkFormSubmit()) {
+			document.forms[formName].submit();
+		}
+	}
+	
+	function setFocus(formName, fieldNo) {
+               if(document.forms[formName].elements[fieldNo] != null) {
+                        document.forms[formName].elements[fieldNo].focus();
+                }
+	}
+	
+	function handleEnter(event, formName) {
+            if (event.keyCode==13) submitForm(formName);
+    }
+	
+	function loadUrl(url) {
+		window.location.href=url;
+	}
+	
+	function goBack() {
+		history.back(-1);
+	}
+	
+	function sendSelection(formobj, fieldname, no) {
+		formobj.elements[fieldname].value = no;
+		submitForm(formobj.name);
+	}
+	
+	function toggleDiv(divid) {
+		if(document.getElementById(divid).style.display == 'none') {
+			document.getElementById(divid).style.display = 'block';
+			document.getElementById(divid + 'Link').innerHTML = '(hide)';
+		} else {
+			document.getElementById(divid).style.display = 'none';
+			document.getElementById(divid + 'Link').innerHTML = '(show)';
+		}
+	}
+	
+	function openPopup(url, width, height) {
+		var load = window.open(url,'','scrollbars=no,menubar=no,height=' + height + ',width=' + width + ',resizable=no,toolbar=no,location=no,status=no');
+	}	
+</script>
+
+		
+<style type="text/css">.userData { BEHAVIOR: url(#default#userdata) } </style>
+<script src="/sil-bid-check/ses.js" type="text/javascript"></script>
+
+		<link rel="stylesheet" href="staticfiles/includes/bootstrap.min.css">
+		<link href="staticfiles/includes/bootstrap-theme.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="staticfiles/includes/custom.css">
+	</head>
+	<body onload="setFocus('LoginForm', 0);">
+        
+        <script language="javascript">
+            function toggle() {
+              var x = document.getElementById("password");
+              if (x.type === "password") {
+                x.type = "text";
+              } else {
+                x.type = "password";
+              }
+            }
+        </script>
+    
+    
+		
+				<div class="container-fluid" id="page-holder">
+			<div class="row">
+				<div class="col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6">
+					<div id="form-container">
+						<div class="row">
+							<div class="col-xs-4 col-sm-6">
+								<img src="staticfiles/images/logo_so.gif" alt="Logo" class="img-responsive" />
+							</div>
+						</div>
+		
+		<div class="row">
+			<div class="col-xs-12">
+				<span class="form-heading" >Anmeldung KASCHUSO gibsso</span> 
+				
+				
+				<p><span class="form-details" >Bitte geben Sie Ihre Benutzerangaben ein.</span></p>
+			</div>
+		</div>
+		<div class="row" id="form-holder">
+			<div class="col-xs-12">
+				<form action="auth" method="post" name="LoginForm" onsubmit="return checkFormSubmit();" >
+							
+													
+					<div class="form-group">
+						<label for="userid">
+							<span class="form-label" >Benutzername</span>
+						</label>
+						<input autocomplete="off" class="form-control" name="userid" onkeypress="handleEnter(event,'LoginForm')" size="40" type="text" />
+					</div>
+
+					<div class="form-group">
+						<label for="userid">
+							<span class="form-label" >Passwort</span> <img src="staticfiles/images/eye.gif"  onclick="toggle();">
+						</label>
+						<input autocomplete="off" class="form-control" id="password" name="password" onkeypress="handleEnter(event,'LoginForm')" size="40" type="password" />
+                        
+                        
+					</div>
+
+					
+					<div class="form-group" id="form-actions">
+						<button class="btn btn-primary" name onclick="javascript:submitForm('LoginForm');" type="submit" >
+							Weiter
+						</button>
+						<button class="btn btn-default" name type="reset" >
+							Reset
+						</button>
+					</div>
+				<input name="currentRequestedPage" type="hidden" value="LcLjlOlhylNbKRBT%2BWI6BQ%3D%3D" /></form>
+				<br>
+				<center><a class="sls-link" href="javascript:loadUrl('/login/sls/auth?cmd=kaschusopasswordreset');" name >
+				Passwort vergessen?
+				</a><center>
+			</div>
+		</div>
+		
+							</div>
+				</div>
+			</div>
+		</div>
+		<span class="userData" id="sesUserData" name="sesUserData"></span>
+		<script src="staticfiles/includes/jquery-2.2.4.min.js"></script>
+		<script src="staticfiles/includes/bootstrap.min.js"></script>
+        <script src="staticfiles/includes/jquery.validate.js"></script>
+        <script src="staticfiles/includes/additional-methods.min.js"></script>		
+		<script type="text/javascript">
+			<!--
+			sesStart("LoginForm");
+			-->
+		</script>
+        
+
+	</body>
+</html>
