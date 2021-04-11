@@ -6,7 +6,7 @@ axios.defaults.withCredentials = true;
 const qs = require('qs');
 const cheerio = require('cheerio');
 
-const BASE_URL   = process.env.KASCHUSO_URL ? process.env.KASCHUSO_URL : 'https://kaschuso.so.ch/';
+const BASE_URL   = process.env.KASCHUSO_BASE_URL || 'https://kaschuso.so.ch/';
 const FORM_URL   = BASE_URL + 'login/sls/auth?RequestedPage=%2f';
 const LOGIN_URL  = BASE_URL + 'login/sls/';
 const SES_JS_URL = BASE_URL + 'sil-bid-check/ses.js';
@@ -98,7 +98,7 @@ async function authenticate(mandator, username, password) {
         }
     );
     
-    if (!loginRes.cookies) {
+    if (!loginRes.cookies['SCDID_S']) {
         const error =  new Error('username or password invalid');
         error.name = 'AuthenticationError';
         throw error;
@@ -372,6 +372,7 @@ axios.interceptors.response.use((response) => {
 });
 
 module.exports = {
+    authenticate,
     getUserInfo,
     getGrades,
     getAbsences,
