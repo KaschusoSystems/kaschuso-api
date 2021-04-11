@@ -4,6 +4,7 @@ router.use('/authenticate', require('./authenticate'));
 router.use('/user', require('./user'));
 router.use('/grades', require('./grades'));
 router.use('/absences', require('./absences'));
+router.use('/mandators', require('./mandators'));
 
 router.use(function(err, req, res, next){
     if(err.name === 'ValidationError'){

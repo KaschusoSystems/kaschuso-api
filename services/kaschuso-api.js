@@ -6,13 +6,13 @@ axios.defaults.withCredentials = true;
 const qs = require('qs');
 const cheerio = require('cheerio');
 
-const BASE_URL   = 'https://kaschuso.so.ch/';
+const BASE_URL   = process.env.KASCHUSO_URL ? process.env.KASCHUSO_URL : 'https://kaschuso.so.ch/';
 const FORM_URL   = BASE_URL + 'login/sls/auth?RequestedPage=%2f';
 const LOGIN_URL  = BASE_URL + 'login/sls/';
 const SES_JS_URL = BASE_URL + 'sil-bid-check/ses.js';
 
 
-const GRADES_PAGE_ID    = 21311;
+const GRADES_PAGE_ID   = 21311;
 const ABSENCES_PAGE_ID = 21111;
 const SETTINGS_PAGE_ID = 22500;
 
@@ -39,30 +39,34 @@ const DEFAULT_HEADERS = {
 
 var cookiesMap = [];
 
-async function authenticate(mandator, username, password) {
-    console.log('Authenticating: ' + username);
-
+/**
+ * Returns the first cookie that is essential to make *any* request.
+ */
+async function basicAuthenticate() {
     let headers = Object.assign({}, DEFAULT_HEADERS);
 
-    // set basic cookies to request login page
+    // set basic cookies to visit any page
 
-    const initRes = await axios.get(BASE_URL + mandator, {
+    const initRes = await axios.get(BASE_URL, {
         withCredentials: true,
         headers: headers,
         maxRedirects: 0
     });
 
-    var cookies = {
+    return {
         SCDID_S: initRes.cookieValue[0].split(';')[0].split('=')[1],
         SLSLanguage: 'de'
     };
-    headers['Cookie'] = toCookieHeaderString(cookies);
+}
 
-    await axios.get(initRes.locationValue, {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0
-    });
+async function authenticate(mandator, username, password) {
+    console.log('Authenticating: ' + username);
+
+    // set basic cookies to request login page
+    var cookies = await basicAuthenticate();
+
+    let headers = Object.assign({}, DEFAULT_HEADERS);
+    headers['Cookie'] = toCookieHeaderString(cookies);
 
     // request login page
 
@@ -257,6 +261,34 @@ async function getAbsences(mandator, username, password) {
         });
 }
 
+async function getMandators() {
+    console.log('Fetching all mandators');
+
+    let headers = Object.assign({}, DEFAULT_HEADERS);
+    headers['Cookie'] = toCookieHeaderString(await basicAuthenticate());
+
+    return axios.get(BASE_URL, {
+            withCredentials: true,
+            headers: headers,
+            maxRedirects: 0
+        }).then(res => {
+            const $ = cheerio.load(res.data);
+        
+            return $('body')
+                .find('a')
+                .toArray()
+                .map(x => {
+                    const url = $(x).attr('href');
+                    return {
+                        name: url ? url.substr(url.lastIndexOf('/') + 1) : undefined,
+                        description: $(x).text().trim(),
+                        url: url
+                    };
+                });
+        });
+    
+}
+
 function findUrl(mandator, html, pageid) {
     return BASE_URL + mandator + '/' + html.match('"(index\\.php\\?pageid=' + pageid + '[^"]*)"')[1];
 }
@@ -264,22 +296,23 @@ function findUrl(mandator, html, pageid) {
 async function getHomepageAndHeaders(mandator, username, password) {
     let cookies = await getCookies(mandator, username, password);
     
-    const headers = Object.assign({}, DEFAULT_HEADERS);
+    let headers = Object.assign({}, DEFAULT_HEADERS);
     headers['Cookie'] = toCookieHeaderString(cookies);
     
-    const homeRes = await axios.get(BASE_URL + mandator + '/loginto.php', {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0
-    });
+    return axios.get(BASE_URL + mandator + '/loginto.php', {
+            withCredentials: true,
+            headers: headers,
+            maxRedirects: 0
+        }).then(res => {
     
-    cookies['PHPSESSID']  = homeRes.headers['set-cookie'][0].split(';')[0].split('=')[1];
-    cookies['layoutSize'] = homeRes.headers['set-cookie'][1].split(';')[0].split('=')[1]
-    headers['Cookie'] = toCookieHeaderString(cookies);
-    return {
-        headers: headers,
-        homeData: homeRes.data
-    };
+            cookies['PHPSESSID']  = res.headers['set-cookie'][0].split(';')[0].split('=')[1];
+            cookies['layoutSize'] = res.headers['set-cookie'][1].split(';')[0].split('=')[1]
+            headers['Cookie'] = toCookieHeaderString(cookies);
+            return {
+                headers: headers,
+                homeData: res.data
+            };
+        });
 }
 
 async function getCookies(mandator, username, password) {
@@ -315,12 +348,13 @@ function storeCookies(mandator, username, cookies) {
 function toCookieHeaderString(cookies) {
     let headerString = "";
 
-    for(var k in cookies) {
+    for (var k in cookies) {
         if (headerString) {
             headerString += "; ";
-        } 
+        }
         headerString += k + "=" + cookies[k]
     }
+
     return headerString;
 }
 
@@ -336,8 +370,8 @@ axios.interceptors.response.use((response) => {
 });
 
 module.exports = {
-    authenticate,
     getUserInfo,
     getGrades,
-    getAbsences
+    getAbsences,
+    getMandators
 };
