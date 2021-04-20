@@ -124,18 +124,6 @@ test('get grades from html', async () => {
             ]
         },
         {
-            "class": "EB-BM1_TE17A-BAYF",
-            "name": "Englisch",
-            "average": "--",
-            "grades": [
-                {
-                    "date": "01.03.2021",
-                    "title": "Interview - Tiger mother",
-                    "weighting": "1"
-                }
-            ]
-        },
-        {
             "class": "M326-INF17A,INF17B-MOSD",
             "name": "M326 Objektorientiert entwerfen und implementieren",
             "average": "6.000",

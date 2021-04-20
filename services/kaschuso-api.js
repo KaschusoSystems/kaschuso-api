@@ -217,14 +217,16 @@ function getGradesFromHtml(html) {
                         points: points,
                         weighting: markRowCells[3]
                     };
-                });
+                })
+                .filter(grade => grade.value);
             return {
                 class: clazz,
                 name: name,
                 average: average,
                 grades: grades
             };
-        });
+        })
+        .filter(subjects => subjects.grades && subjects.grades.length > 0);
 }
 
 async function getAbsences(mandator, username, password) {
