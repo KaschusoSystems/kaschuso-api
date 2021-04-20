@@ -1,2 +1,1 @@
-yarn
-yarn test
+yarn && yarn test
