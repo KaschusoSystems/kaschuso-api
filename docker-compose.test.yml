@@ -1,3 +1,3 @@
 sut:
     build: .
-    command: yarn install && yarn test
+    command: yarn && yarn test
