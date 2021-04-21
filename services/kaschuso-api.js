@@ -16,7 +16,7 @@ const GRADES_PAGE_ID   = 21311;
 const ABSENCES_PAGE_ID = 21111;
 const SETTINGS_PAGE_ID = 22500;
 
-const SES_PARAM_REGEX = "var bid = getBid\\\('([^']*?)'";
+const SES_PARAM_REGEX = /var bid = getBid\('([^']*?)'/;
 
 const DEFAULT_HEADERS = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,/;q=0.8,application/signed-exchange;v=b3;q=0.9',
