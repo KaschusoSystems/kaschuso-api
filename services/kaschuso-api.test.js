@@ -112,14 +112,16 @@ test('get grades from html', async () => {
                     "title": "Schachnovelle",
                     "value": "5.25",
                     "points": "12",
-                    "weighting": "1"
+                    "weighting": "1",
+                    "average": "4.781"
                 },
                 {
                     "date": "08.04.2021",
                     "title": "Literaturgeschichte",
                     "value": "4.5",
                     "points": "18",
-                    "weighting": "1"
+                    "weighting": "1",
+                    "average": "4.617"
                 }
             ]
         },
@@ -133,7 +135,8 @@ test('get grades from html', async () => {
                     "title": "Anwendung Projekt M306",
                     "value": "6",
                     "points": "21",
-                    "weighting": "1"
+                    "weighting": "1",
+                    "average": "5.459"
                 }
             ]
         },
@@ -147,7 +150,8 @@ test('get grades from html', async () => {
                     "title": "Skalarprodukt",
                     "value": "4.7",
                     "points": "8",
-                    "weighting": "1"
+                    "weighting": "1",
+                    "average": "4.138"
                 }
             ]
         },
@@ -160,14 +164,16 @@ test('get grades from html', async () => {
                     "date": "29.01.2021",
                     "title": "Noise-Cancelling",
                     "value": "5.625",
-                    "weighting": "1"
+                    "weighting": "1",
+                    "average": "4.875"
                 },
                 {
                     "date": "26.03.2021",
                     "title": "Schwingungen",
                     "value": "5.9",
                     "points": "17",
-                    "weighting": "1"
+                    "weighting": "1",
+                    "average": "4.6"
                 }
             ]
         }

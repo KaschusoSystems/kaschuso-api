@@ -215,7 +215,8 @@ function getGradesFromHtml(html) {
                         title: markRowCells[1],
                         value: value,
                         points: points,
-                        weighting: markRowCells[3]
+                        weighting: markRowCells[3],
+                        average: markRowCells[4]
                     };
                 })
                 .filter(grade => grade.value);
