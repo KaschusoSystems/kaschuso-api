@@ -212,7 +212,7 @@ function getGradesFromHtml(html) {
                     const points = valuePoints[1] ? valuePoints[1].match('Punkte: (\\d*)')[1] : undefined;
                     return {
                         date: markRowCells[0],
-                        title: markRowCells[1],
+                        name: markRowCells[1],
                         value: value,
                         points: points,
                         weighting: markRowCells[3],

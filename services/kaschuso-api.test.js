@@ -109,7 +109,7 @@ test('get grades from html', async () => {
             "grades": [
                 {
                     "date": "22.03.2021",
-                    "title": "Schachnovelle",
+                    "name": "Schachnovelle",
                     "value": "5.25",
                     "points": "12",
                     "weighting": "1",
@@ -117,7 +117,7 @@ test('get grades from html', async () => {
                 },
                 {
                     "date": "08.04.2021",
-                    "title": "Literaturgeschichte",
+                    "name": "Literaturgeschichte",
                     "value": "4.5",
                     "points": "18",
                     "weighting": "1",
@@ -132,7 +132,7 @@ test('get grades from html', async () => {
             "grades": [
                 {
                     "date": "30.03.2021",
-                    "title": "Anwendung Projekt M306",
+                    "name": "Anwendung Projekt M306",
                     "value": "6",
                     "points": "21",
                     "weighting": "1",
@@ -147,7 +147,7 @@ test('get grades from html', async () => {
             "grades": [
                 {
                     "date": "18.03.2021",
-                    "title": "Skalarprodukt",
+                    "name": "Skalarprodukt",
                     "value": "4.7",
                     "points": "8",
                     "weighting": "1",
@@ -162,14 +162,14 @@ test('get grades from html', async () => {
             "grades": [
                 {
                     "date": "29.01.2021",
-                    "title": "Noise-Cancelling",
+                    "name": "Noise-Cancelling",
                     "value": "5.625",
                     "weighting": "1",
                     "average": "4.875"
                 },
                 {
                     "date": "26.03.2021",
-                    "title": "Schwingungen",
+                    "name": "Schwingungen",
                     "value": "5.9",
                     "points": "17",
                     "weighting": "1",
