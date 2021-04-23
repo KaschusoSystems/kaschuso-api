@@ -1,9 +1,0 @@
-version: "3"
-services:
-  kaschuso-api:
-    # image: thisnoah/kaschuso-notifier:latest
-    build: .
-    container_name: kaschuso-api
-    restart: unless-stopped
-    ports:
-        - 3001:3001
