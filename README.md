@@ -1,6 +1,5 @@
 # kaschuso-api
 
-[![Docker](https://github.com/KaschusoSystems/kaschuso-api/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/KaschusoSystems/kaschuso-api/actions/workflows/docker-publish.yml)
-[![Node.js CI](https://github.com/KaschusoSystems/kaschuso-api/actions/workflows/node.js.yml/badge.svg)](https://github.com/KaschusoSystems/kaschuso-api/actions/workflows/node.js.yml)
+[![pipeline status](https://gitlab.com/kaschusosystems/kaschuso-api/badges/master/pipeline.svg)](https://gitlab.com/kaschusosystems/kaschuso-api/-/commits/master)
 
 API wrapper for kaschuso.so.ch
