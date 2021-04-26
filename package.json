@@ -29,8 +29,6 @@
     "jsonwebtoken": "7.1.9",
     "method-override": "2.3.5",
     "methods": "1.1.2",
-    "mongoose": "4.4.10",
-    "mongoose-unique-validator": "1.0.2",
     "morgan": "1.7.0",
     "passport": "0.3.2",
     "passport-local": "1.0.0",
@@ -42,7 +40,6 @@
   },
   "devDependencies": {
     "jest": "^26.6.3",
-    "newman": "^3.8.2",
     "nodemon": "^1.11.0"
   }
 }
