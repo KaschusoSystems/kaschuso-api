@@ -1,18 +1,16 @@
 require('dotenv').config();
 
-var http = require('http'),
-    path = require('path'),
-    methods = require('methods'),
-    express = require('express'),
+var express = require('express'),
     bodyParser = require('body-parser'),
     cors = require('cors'),
-    errorhandler = require('errorhandler')
+    errorhandler = require('errorhandler'),
+    morgan = require('morgan');
 
 var isProduction = process.env.NODE_ENV === 'production';
 
 if (!isProduction) {
     sslkeylog = require('sslkeylog');
-    sslkeylog.setLog('C:\\temp\\keylogfile.txt').hookAll();
+    sslkeylog.setLog('/tmp/keylogfile.txt').hookAll();
 }
 
 // Create global app object
@@ -21,7 +19,11 @@ var app = express();
 app.use(cors());
 
 // Normal express config defaults
-app.use(require('morgan')('dev'));
+morgan.token('url', function (req, res) { 
+    const url = req.originalUrl || req.url;
+    return url.replace(/(\?|&)password=[^&]*/, '$1password=' + '\x1b[31m' + 'hidden' + '\x1b[0m'); // color 'hidden' as red
+});
+app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
