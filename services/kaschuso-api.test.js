@@ -40,9 +40,9 @@ test('find url by pageid', async () => {
     .toBe('https://kaschuso.so.ch/school/index.php?pageid=22500&id=f0c039a84fc469e6&amp;transid=5a5e77');
 });
 
-test('find url by pageid', async () => {
+test('get mandators from html', async () => {
     const html = fs.readFileSync('./__test__/root.html', 'utf8');
-    expect(getMandatorsFromHtml(html))
+    expect(await getMandatorsFromHtml(html))
     .toEqual([
         {
             "name": "bzwh",
@@ -64,7 +64,7 @@ test('find url by pageid', async () => {
 
 test('get absences from html', async () => {
     const html = fs.readFileSync('./__test__/absences.html', 'utf8');
-    expect(getAbsencesFromHtml(html))
+    expect(await getAbsencesFromHtml(html))
     .toEqual([
         {
             "date": "30.03.2021",
@@ -100,7 +100,7 @@ test('get absences from html', async () => {
 
 test('get grades from html', async () => {
     const html = fs.readFileSync('./__test__/grades.html', 'utf8');
-    expect(getGradesFromHtml(html))
+    expect(await getGradesFromHtml(html))
     .toEqual([
         {
             "class": "D-BM1_TE17A-GEIM",
@@ -183,7 +183,7 @@ test('get grades from html', async () => {
 test('get user info from html', async () => {
     const homeHtml = fs.readFileSync('./__test__/start.html', 'utf8');
     const settingsHtml = fs.readFileSync('./__test__/settings.html', 'utf8');
-    expect(getUserInfoFromHtml(homeHtml, settingsHtml, "school", "vorname.nachname"))
+    expect(await getUserInfoFromHtml(homeHtml, settingsHtml, "school", "vorname.nachname"))
     .toEqual({
         "mandator": "school",
         "username": "vorname.nachname",
