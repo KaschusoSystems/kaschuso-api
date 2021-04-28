@@ -62,24 +62,23 @@ async function authenticate(mandator, username, password) {
     headers['Cookie'] = toCookieHeaderString(cookies);
 
     // request login page
-
-    const formRes = await axios.get(FORM_URL + mandator, {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0
-    });
-
-    const sesJS = await axios.get(SES_JS_URL, {
-        withCredentials: true,
-        headers: headers,
-        maxRedirects: 0
-    });
+    const [formRes, sesJS] = await Promise.all([
+        axios.get(FORM_URL + mandator, {
+            withCredentials: true,
+            headers: headers,
+            maxRedirects: 0
+        }),
+        axios.get(SES_JS_URL, {
+            withCredentials: true,
+            headers: headers,
+            maxRedirects: 0
+        })
+    ]);
 
     let loginHeaders = Object.assign({}, headers);
     loginHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
 
     // make login
-
     const loginRes = await axios.post(LOGIN_URL + getActionFromSesJs(sesJS.data), 
         qs.stringify({
             userid: username,
@@ -126,22 +125,22 @@ async function getUserInfo(mandator, username, password) {
         maxRedirects: 0
     });
 
-    return getUserInfoFromHtml(homeData, settingsRes.data, mandator, username);
+    return await getUserInfoFromHtml(homeData, settingsRes.data, mandator, username);
 }
 
-function getUserInfoFromHtml(homeHtml, settingsHtml, mandator, username) {
+async function getUserInfoFromHtml(homeHtml, settingsHtml, mandator, username) {
     const $home = cheerio.load(homeHtml);
     const infos = {};
-    $home('#content-card > div > div > table')
+    await Promise.all($home('#content-card > div > div > table')
         .find('tbody > tr')
         .toArray()
-        .forEach(x => {
+        .map(async x => {
             const row = $home(x)
                 .find('td')
                 .toArray()
                 .map(x => $home(x).text());
             infos[row[0]] = row[1];
-        });
+        }));
 
     const $settings = cheerio.load(settingsHtml);
 
@@ -175,17 +174,17 @@ async function getGrades(mandator, username, password) {
         maxRedirects: 0
     });
 
-    return getGradesFromHtml(gradesRes.data);
+    return await getGradesFromHtml(gradesRes.data);
 } 
 
-function getGradesFromHtml(html) {
+async function getGradesFromHtml(html) {
     const $ = cheerio.load(html);
 
-    return $('#uebersicht_bloecke>page>div>table')
+    return (await Promise.all($('#uebersicht_bloecke>page>div>table')
         // find table with grades for each subject
         .find('tbody>tr>td>table')
         .toArray()
-        .map(x => {
+        .map(async x => {
             // find the previous table row with subject details
             const subjectsRowCells = $(x).parents().prev()
                 .find('td')
@@ -197,11 +196,11 @@ function getGradesFromHtml(html) {
             const average = subjectsRowCells[1].trim();
 
             // find all grades for a subject 
-            const grades = $(x).find('tbody>tr')
+            const grades = (await Promise.all($(x).find('tbody>tr')
                 .toArray()
                 // filter header row and totalizer row
                 .filter(x => !$(x).find('td>i')[0])
-                .map(x => {
+                .map(async x => {
                     const markRowCells = $(x)
                         .find('td')
                         .toArray()
@@ -218,7 +217,7 @@ function getGradesFromHtml(html) {
                         weighting: markRowCells[3],
                         average: markRowCells[4]
                     };
-                })
+                })))
                 .filter(grade => grade.value);
             return {
                 class: clazz,
@@ -226,7 +225,7 @@ function getGradesFromHtml(html) {
                 average: average,
                 grades: grades
             };
-        })
+        })))
         .filter(subjects => subjects.grades && subjects.grades.length > 0);
 }
 
@@ -241,23 +240,23 @@ async function getAbsences(mandator, username, password) {
         maxRedirects: 0
     });
 
-    return getAbsencesFromHtml(absencesRes.data);
+    return await getAbsencesFromHtml(absencesRes.data);
 }
 
-function getAbsencesFromHtml(html) {
+async function getAbsencesFromHtml(html) {
     const $ = cheerio.load(html);
 
-    return $('#uebersicht_bloecke>page>div>form>table')
+    return await Promise.all($('#uebersicht_bloecke>page>div>form>table')
         // find table with grades for each subject
         .find('tbody>tr')
         .toArray()
         // filter totalizer row
         .filter(x => $(x).find('td > div > input')[0])
-        .map(x => {
-            const absenceRowCells = $(x)
+        .map(async x => {
+            const absenceRowCells = await Promise.all($(x)
                 .find('td')
                 .toArray()
-                .map(x => $(x).text().trim());
+                .map(async x => $(x).text().trim()));
 
             const reason = $(x).find('td > div > input').attr('value');
 
@@ -269,7 +268,7 @@ function getAbsencesFromHtml(html) {
                 comment: absenceRowCells[4] ? absenceRowCells[4] : undefined,
                 reason: reason ? reason : undefined
             };
-        });
+        }));
 }
 
 async function getMandators() {
@@ -278,27 +277,27 @@ async function getMandators() {
     let headers = Object.assign({}, DEFAULT_HEADERS);
     headers['Cookie'] = toCookieHeaderString(await basicAuthenticate());
 
-    return axios.get(BASE_URL, {
+    return await axios.get(BASE_URL, {
             withCredentials: true,
             headers: headers,
             maxRedirects: 0
         }).then(res => getMandatorsFromHtml(res.data));
 }
 
-function getMandatorsFromHtml(html) {
+async function getMandatorsFromHtml(html) {
     const $ = cheerio.load(html);
 
-    return $('body')
+    return await Promise.all($('body')
         .find('a')
         .toArray()
-        .map(x => {
+        .map(async x => {
             const url = $(x).attr('href');
             return {
                 name: url ? url.substr(url.lastIndexOf('/') + 1) : undefined,
                 description: $(x).text().trim(),
                 url: url
             };
-        });
+        }));
 }
 
 function findUrlByPageid(mandator, html, pageid) {
