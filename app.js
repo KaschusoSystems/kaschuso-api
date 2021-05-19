@@ -8,11 +8,6 @@ var express = require('express'),
 
 var isProduction = process.env.NODE_ENV === 'production';
 
-if (!isProduction) {
-    sslkeylog = require('sslkeylog');
-    sslkeylog.setLog('/tmp/keylogfile.txt').hookAll();
-}
-
 // Create global app object
 var app = express();
 
