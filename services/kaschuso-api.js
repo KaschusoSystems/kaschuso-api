@@ -260,11 +260,16 @@ async function getAbsencesFromHtml(html) {
 
             const reason = $(x).find('td > div > input').attr('value');
 
+            var status = absenceRowCells[3];
+            if (status && status.endsWith('**')) {
+                status = status.substring(0, status.length - 2).trim();
+            }
+
             return {
                 date: absenceRowCells[0],
                 time: absenceRowCells[1],
                 class: absenceRowCells[2],
-                status: absenceRowCells[3],
+                status: status,
                 comment: absenceRowCells[4] ? absenceRowCells[4] : undefined,
                 reason: reason ? reason : undefined
             };
