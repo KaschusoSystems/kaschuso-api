@@ -95,6 +95,13 @@ test('get absences from html', async () => {
             "comment": "Zahnarztbesuch",
             "reason": "Rektruktierung",
         },
+        {
+            "date": "15.03.2019",
+            "time": "09:15 - 10:00",
+            "class": "HUSO-BM1_TE31A-LOMA",
+            "status": "Unentschuldigt",
+            "reason": "Verschlafen",
+        },
     ]);
 });
 
